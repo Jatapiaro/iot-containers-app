@@ -26,10 +26,8 @@ Navigation.events().registerAppLaunchedListener(() => {
 							name: 'containers-app.AuthScreen',
 							options: {
 								topBar: {
-									title: {
-										text: 'Login'
-									}
-								}
+									visible: false
+								},
 							}
 						}
 					}

@@ -1,77 +1,230 @@
 import React, {Component} from 'react';
-import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
-import axios from 'axios';
+import {
+    AsyncStorage,
+    Dimensions,
+    KeyboardAvoidingView,
+    StyleSheet,
+    ScrollView,
+} from 'react-native';
+import { Button, Text, Icon } from 'react-native-elements';
+import FormInput from './../../components/FormInput';
+import User from '../../models/User';
+
+// Get screen dimentions
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default class AuthScreen extends Component {
-
-    loginHandler = () => {
-    }
-
-    test = () => {
-        alert("Helo");
-    }
 
     constructor(props) {
         super(props);
         this.state = {
-            email: "",
-            password: "",
-            registration: false
+            user: new User(),
+            errors: {},
+            registration: false,
+            login: false,
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        
     }
 
-    componentDidUpdate() {
-        console.log(this.state);
-    }
-
+    /**
+     * Handles the value change of an input
+     */
     handleValueChange = (name, value) => {
-        this.setState({[name]: value});
+        let user = this.state.user;
+        user[name] = value;
+        this.setState({user: user});
     }
 
+    /**
+     * Calls the authorize function on the backend
+     * when the user clic on the login button
+     */
     handleLogin = () => {
-        this.props.authorizationService.authorize(this.state.email, this.state.password)
+        this.props.authorizationService.authorize(this.state.user.email, this.state.user.password)
             .then(res => {
                 console.log(res);
+                this.setState({login: false});
             })
             .catch(err => {
                 console.log(err);
+                this.setState({login: false});
             });
     }
 
+    /**
+     * Handles the button action and triggers
+     * the correct method
+     */
+    handleSignUpOrLogin = () => {
+        this.setState({login: true});
+        if ( this.state.registration ) {
+
+        } else {
+            this.handleLogin();
+        }
+    }
+
+    /**
+     * Renders the content
+     */
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Iniciar Sesión</Text>
-                <TextInput 
-                    value={this.state.email}
-                    placeholder="Email"
-                    onChangeText={(value) => {this.handleValueChange('email', value)}}
-                />
-                <TextInput 
-                    value={this.state.password}
-                    placeholder="Password"
-                    onChangeText={(value) => {this.handleValueChange('password', value)}}
-                />
-                <Button 
-                    title="Ok"
-                    onPress={this.handleLogin}
-                />
-            </View>
+            <ScrollView
+                scrollEnabled={false}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={styles.container}
+            >
+                
+                <KeyboardAvoidingView
+                    behavior="position"
+                    contentContainerStyle={styles.formContainer}
+                >
+
+                    <Text h3={true} style={styles.text}>
+                        {this.state.registration? `Regístrate` : `Inicia Sesión`}
+                    </Text>
+                    
+                    {
+                        this.state.registration && (
+                            <FormInput
+                                icon="ios-contact"
+                                value={this.state.user.name}
+                                onChangeText={(name) => {this.handleValueChange("name", name)}}
+                                placeholder="Nombre"
+                                returnKeyType="next"
+                                errorMessage={
+                                    (typeof this.state.errors.name !== undefined) ? null : "Your username can't be blank"
+                                }
+                                onSubmitEditing={() => {
+                                }}
+                            />
+                        )
+                    }
+
+                    <FormInput
+                        icon="ios-mail"
+                        value={this.state.user.email}
+                        onChangeText={(email) => {this.handleValueChange("email", email)}}
+                        placeholder="Email"
+                        keyboardType="email-address"
+                        returnKeyType="next"
+                        errorMessage={
+                            (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                        }
+                        onSubmitEditing={() => {
+                        }}
+                    />
+
+                    <FormInput
+                        icon="ios-lock"
+                        value={this.state.user.password}
+                        onChangeText={(password) => {this.handleValueChange("password", password)}}
+                        placeholder="Password"
+                        secureTextEntry
+                        errorMessage={
+                            (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                        }
+                        onSubmitEditing={() => {
+                        }}
+                    />
+
+                    <Button
+                        buttonStyle={styles.signUpButton}
+                        titleStyle={styles.signUpButtonText}
+                        loading={this.state.login}
+                        title={this.state.registration? `Regístrate` : `Inicia Sesión`}
+                        icon={<Icon name="md-key" type={"ionicon"} color="#7384B4" size={25} iconStyle={styles.icon}/>}
+                        onPress={this.handleSignUpOrLogin}
+                    />
+
+                    <Button
+                        title={this.state.registration? `¿Ya tienes una cuenta? !Inicia Sesión¡` : `¿Aun no tienes cuenta? ¡Regístrate!`}
+                        type="clear"
+                        titleStyle={styles.toggleButton}
+                        onPress={this.toggle}
+                    />
+
+                </KeyboardAvoidingView>
+            </ScrollView>
         );
+    }
+
+    /**
+     * Toggles between log in and sign up
+     */
+    toggle = () => {
+        this.setState((prevState) => {
+            return {
+                registration: !prevState.registration
+            }
+        });
     }
 
 }
 
 const styles = StyleSheet.create({
 
+    toggleButton: {
+        color: "#fc7b0d"
+    },
+
+    icon: {
+        color: "#fff"
+    },
+
+    inputContainer: {
+        paddingLeft: 8,
+        borderRadius: 40,
+        borderWidth: 1,
+        borderColor: 'rgba(110, 120, 170, 1)',
+        height: 45,
+        marginVertical: 10,
+    },
+
+    inputStyle: {
+        flex: 1,
+        marginLeft: 10,
+        color: 'white',
+        fontFamily: 'light',
+        fontSize: 16,
+    },
 
     container: {
-        alignItems: 'center',
         flex: 1,
-        justifyContent: 'center',
+        paddingBottom: 20,
+        paddingTop: 20,
+        backgroundColor: '#293046',
+        width: SCREEN_WIDTH,
+        height: SCREEN_HEIGHT,
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
+
+    formContainer: {
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+
+    signUpButton: {
+        backgroundColor: "#fc7b0d",
+        width: 250,
+        borderRadius: 50,
+        height: 45,
+    },
+
+    signUpButtonText: {
+        fontSize: 20,
+        marginLeft: 10
+    },
+
+    text: {
+        color: "#fff",
+    }
+
 
 });
