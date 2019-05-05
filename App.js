@@ -1,49 +1,40 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { Navigation } from 'react-native-navigation';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import AuthScreen from './src/screens/Auth/Auth';
+import HttpService from './src/services/HttpService';
+import OauthService from './src/services/OAuthService';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+const httpService = new HttpService();
+const authorizationService = new OauthService();
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
-}
+// Register screens
+Navigation.registerComponent("containers-app.AuthScreen", () => (props) => (
+  <AuthScreen {...props} authorizationService={authorizationService}/>
+), () => AuthScreen);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+
+// Start the app
+Navigation.events().registerAppLaunchedListener(() => {
+	Navigation.setRoot({
+		root: {
+			stack: {
+				children: [
+					{
+						component: {
+							id: 'id',
+							name: 'containers-app.AuthScreen',
+							options: {
+								topBar: {
+									title: {
+										text: 'Login'
+									}
+								}
+							}
+						}
+					}
+				],
+			}
+		}
+	});
 });
