@@ -9,13 +9,18 @@ import { Button, Text, Icon } from 'react-native-elements';
 import FormInput from './../../components/FormInput';
 import User from '../../models/User';
 import Authorization from '../../models/Authorization';
+import StartMainTabs from './../MainTabs/StartMainTabs';
+
+// Redux
+import { connect } from 'react-redux';
+import { setAuthorization } from './../../store/actions/Index';
 
 // Get screen dimentions
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const STORAGE_KEY = 'authorization';
 
-export default class AuthScreen extends Component {
+class AuthScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -34,7 +39,10 @@ export default class AuthScreen extends Component {
                 if (res === null || typeof res === 'undefined') {
                     console.log("No tiene el elemento");
                 } else {
-                    console.log(res);
+                    //If we have the data, we go to the next view.
+                    this.props.setAuthorizationData(JSON.parse(res));
+                    // Load the main screen
+                    StartMainTabs();
                 }
             })
             .catch(err => {
@@ -61,7 +69,10 @@ export default class AuthScreen extends Component {
                 let authorization = new Authorization(res);
                 this.props.asyncStorageService.store(STORAGE_KEY, authorization)
                     .then(res => {
+                        // We also add the authorization data to the reducers to avoid async storage
+                        this.props.setAuthorizationData(authorization);
                         this.setState({loading: false});
+                        StartMainTabs();
                     })
                     .catch(err => {
                         console.log(err);
@@ -72,15 +83,9 @@ export default class AuthScreen extends Component {
                  * TODO: Remove this when the app is complete,
                  * currently this is a way to test the ausence of authorization
                  */
-                this.props.asyncStorageService.fetch(STORAGE_KEY)
+                this.props.asyncStorageService.remove(STORAGE_KEY)
                 .then(res => {
-                    this.props.asyncStorageService.remove(STORAGE_KEY)
-                    .then(res => {
-                        this.setState({loading: false});
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    });
+                    this.setState({loading: false});
                 })
                 .catch(err => {
                     console.log(err);
@@ -262,3 +267,10 @@ const styles = StyleSheet.create({
 
 
 });
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setAuthorizationData: authorization => dispatch(setAuthorization(authorization))
+    }
+};
+export default connect(null, mapDispatchToProps)(AuthScreen);
