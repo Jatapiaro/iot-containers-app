@@ -55,6 +55,7 @@
 		C0A01615227F7ED200D85FAC /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0A01606227F7ED100D85FAC /* SimpleLineIcons.ttf */; };
 		C0A01616227F7ED200D85FAC /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0A01607227F7ED100D85FAC /* MaterialIcons.ttf */; };
 		C0A01627227F7F2300D85FAC /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A015E2227F7DCB00D85FAC /* libRNVectorIcons.a */; };
+		C0A01657227FB07800D85FAC /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C0A01656227FB06700D85FAC /* libRNCAsyncStorage.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
@@ -361,6 +362,13 @@
 			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
 			remoteInfo = "RNVectorIcons-tvOS";
 		};
+		C0A01655227FB06700D85FAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C0A0164F227FB06700D85FAC /* RNCAsyncStorage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNCAsyncStorage;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -407,6 +415,7 @@
 		C0A01605227F7ED100D85FAC /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		C0A01606227F7ED100D85FAC /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		C0A01607227F7ED100D85FAC /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		C0A0164F227FB06700D85FAC /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -424,6 +433,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0A01657227FB07800D85FAC /* libRNCAsyncStorage.a in Frameworks */,
 				C0A01627227F7F2300D85FAC /* libRNVectorIcons.a in Frameworks */,
 				C055A2BD227EB58D00712538 /* libReactNativeNavigation.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
@@ -616,6 +626,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				C0A0164F227FB06700D85FAC /* RNCAsyncStorage.xcodeproj */,
 				C0A015B5227F7DCB00D85FAC /* RNVectorIcons.xcodeproj */,
 				C055A28F227EB57200712538 /* ReactNativeNavigation.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -717,6 +728,14 @@
 			);
 			name = Fonts;
 			path = "../node_modules/react-native-vector-icons/Fonts";
+			sourceTree = "<group>";
+		};
+		C0A01650227FB06700D85FAC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C0A01656227FB06700D85FAC /* libRNCAsyncStorage.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -886,6 +905,10 @@
 				{
 					ProductGroup = C055A290227EB57200712538 /* Products */;
 					ProjectRef = C055A28F227EB57200712538 /* ReactNativeNavigation.xcodeproj */;
+				},
+				{
+					ProductGroup = C0A01650227FB06700D85FAC /* Products */;
+					ProjectRef = C0A0164F227FB06700D85FAC /* RNCAsyncStorage.xcodeproj */;
 				},
 				{
 					ProductGroup = C0A015B6227F7DCB00D85FAC /* Products */;
@@ -1188,6 +1211,13 @@
 			fileType = archive.ar;
 			path = "libRNVectorIcons-tvOS.a";
 			remoteRef = C0A015E3227F7DCB00D85FAC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C0A01656227FB06700D85FAC /* libRNCAsyncStorage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCAsyncStorage.a;
+			remoteRef = C0A01655227FB06700D85FAC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

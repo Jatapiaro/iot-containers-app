@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-    AsyncStorage,
     Dimensions,
     KeyboardAvoidingView,
     StyleSheet,
@@ -9,10 +8,12 @@ import {
 import { Button, Text, Icon } from 'react-native-elements';
 import FormInput from './../../components/FormInput';
 import User from '../../models/User';
+import Authorization from '../../models/Authorization';
 
 // Get screen dimentions
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
+const STORAGE_KEY = 'authorization';
 
 export default class AuthScreen extends Component {
 
@@ -22,12 +23,23 @@ export default class AuthScreen extends Component {
             user: new User(),
             errors: {},
             registration: false,
-            login: false,
+            loading: false,
+            fetchingAuthorization: false,
         };
     }
 
     componentWillMount() {
-        
+        this.props.asyncStorageService.fetch(STORAGE_KEY)
+            .then(res => {
+                if (res === null || typeof res === 'undefined') {
+                    console.log("No tiene el elemento");
+                } else {
+                    console.log(res);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     /**
@@ -46,12 +58,33 @@ export default class AuthScreen extends Component {
     handleLogin = () => {
         this.props.authorizationService.authorize(this.state.user.email, this.state.user.password)
             .then(res => {
-                console.log(res);
-                this.setState({login: false});
+                let authorization = new Authorization(res);
+                this.props.asyncStorageService.store(STORAGE_KEY, authorization)
+                    .then(res => {
+                        this.setState({loading: false});
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             })
             .catch(err => {
-                console.log(err);
-                this.setState({login: false});
+                /**
+                 * TODO: Remove this when the app is complete,
+                 * currently this is a way to test the ausence of authorization
+                 */
+                this.props.asyncStorageService.fetch(STORAGE_KEY)
+                .then(res => {
+                    this.props.asyncStorageService.remove(STORAGE_KEY)
+                    .then(res => {
+                        this.setState({loading: false});
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
             });
     }
 
@@ -60,7 +93,7 @@ export default class AuthScreen extends Component {
      * the correct method
      */
     handleSignUpOrLogin = () => {
-        this.setState({login: true});
+        this.setState({loading: true});
         if ( this.state.registration ) {
 
         } else {
@@ -78,77 +111,78 @@ export default class AuthScreen extends Component {
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={styles.container}
             >
-                
-                <KeyboardAvoidingView
-                    behavior="position"
-                    contentContainerStyle={styles.formContainer}
-                >
+                {
+                    !this.state.fetchingAuthorization &&
+                    <KeyboardAvoidingView
+                        behavior="position"
+                        contentContainerStyle={styles.formContainer}
+                    >
 
-                    <Text h3={true} style={styles.text}>
-                        {this.state.registration? `Regístrate` : `Inicia Sesión`}
-                    </Text>
-                    
-                    {
-                        this.state.registration && (
-                            <FormInput
-                                icon="ios-contact"
-                                value={this.state.user.name}
-                                onChangeText={(name) => {this.handleValueChange("name", name)}}
-                                placeholder="Nombre"
-                                returnKeyType="next"
-                                errorMessage={
-                                    (typeof this.state.errors.name !== undefined) ? null : "Your username can't be blank"
-                                }
-                                onSubmitEditing={() => {
-                                }}
-                            />
-                        )
-                    }
-
-                    <FormInput
-                        icon="ios-mail"
-                        value={this.state.user.email}
-                        onChangeText={(email) => {this.handleValueChange("email", email)}}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        returnKeyType="next"
-                        errorMessage={
-                            (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                        <Text h3={true} style={styles.text}>
+                            {this.state.registration? `Regístrate` : `Inicia Sesión`}
+                        </Text>
+                        
+                        {
+                            this.state.registration && (
+                                <FormInput
+                                    icon="ios-contact"
+                                    value={this.state.user.name}
+                                    onChangeText={(name) => {this.handleValueChange("name", name)}}
+                                    placeholder="Nombre"
+                                    returnKeyType="next"
+                                    errorMessage={
+                                        (typeof this.state.errors.name !== undefined) ? null : "Your username can't be blank"
+                                    }
+                                    onSubmitEditing={() => {
+                                    }}
+                                />
+                            )
                         }
-                        onSubmitEditing={() => {
-                        }}
-                    />
 
-                    <FormInput
-                        icon="ios-lock"
-                        value={this.state.user.password}
-                        onChangeText={(password) => {this.handleValueChange("password", password)}}
-                        placeholder="Password"
-                        secureTextEntry
-                        errorMessage={
-                            (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
-                        }
-                        onSubmitEditing={() => {
-                        }}
-                    />
+                        <FormInput
+                            icon="ios-mail"
+                            value={this.state.user.email}
+                            onChangeText={(email) => {this.handleValueChange("email", email)}}
+                            placeholder="Email"
+                            keyboardType="email-address"
+                            returnKeyType="next"
+                            errorMessage={
+                                (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                            }
+                            onSubmitEditing={() => {
+                            }}
+                        />
 
-                    <Button
-                        buttonStyle={styles.signUpButton}
-                        titleStyle={styles.signUpButtonText}
-                        loading={this.state.login}
-                        title={this.state.registration? `Regístrate` : `Inicia Sesión`}
-                        icon={<Icon name="md-key" type={"ionicon"} color="#7384B4" size={25} iconStyle={styles.icon}/>}
-                        onPress={this.handleSignUpOrLogin}
-                    />
+                        <FormInput
+                            icon="ios-lock"
+                            value={this.state.user.password}
+                            onChangeText={(password) => {this.handleValueChange("password", password)}}
+                            placeholder="Password"
+                            secureTextEntry
+                            errorMessage={
+                                (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                            }
+                            onSubmitEditing={() => {
+                            }}
+                        />
 
-                    <Button
-                        title={this.state.registration? `¿Ya tienes una cuenta? !Inicia Sesión¡` : `¿Aun no tienes cuenta? ¡Regístrate!`}
-                        type="clear"
-                        titleStyle={styles.toggleButton}
-                        onPress={this.toggle}
-                    />
+                        <Button
+                            buttonStyle={styles.signUpButton}
+                            titleStyle={styles.signUpButtonText}
+                            loading={this.state.loading}
+                            title={this.state.registration? `Regístrate` : `Inicia Sesión`}
+                            icon={<Icon name="md-key" type={"ionicon"} color="#7384B4" size={25} iconStyle={styles.icon}/>}
+                            onPress={this.handleSignUpOrLogin}
+                        />
 
-                </KeyboardAvoidingView>
+                        <Button
+                            title={this.state.registration? `¿Ya tienes una cuenta? !Inicia Sesión¡` : `¿Aun no tienes cuenta? ¡Regístrate!`}
+                            type="clear"
+                            titleStyle={styles.toggleButton}
+                            onPress={this.toggle}
+                        />
+                    </KeyboardAvoidingView>
+                }
             </ScrollView>
         );
     }
