@@ -21,7 +21,7 @@ export default class OauthService {
         const body = {
             "grant_type": "password",
             "client_id": 3,
-            "client_secret": "mcwecxuVNWeMkQ8wr40JKOI9nX56s7RSs3skJHAB",
+            "client_secret": "VYmq4n1pkxP7lUt6JvlWFTgbjqCxCjQoz6mNVuhw",
             "username": username,
             "password": password,
             "scope": ""
