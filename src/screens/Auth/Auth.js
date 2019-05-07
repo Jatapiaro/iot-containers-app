@@ -1,23 +1,21 @@
 import React, {Component} from 'react';
 import {
-    Dimensions,
     KeyboardAvoidingView,
-    StyleSheet,
-    ScrollView,
+    StyleSheet
 } from 'react-native';
 import { Button, Text, Icon } from 'react-native-elements';
+import DefaultScrollView from '../../components/DefaultScrollView';
 import FormInput from './../../components/FormInput';
 import User from '../../models/User';
 import Authorization from '../../models/Authorization';
 import StartMainTabs from './../MainTabs/StartMainTabs';
+
 
 // Redux
 import { connect } from 'react-redux';
 import { setAuthorization } from './../../store/actions/Index';
 
 // Get screen dimentions
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 const STORAGE_KEY = 'authorization';
 
 class AuthScreen extends Component {
@@ -111,10 +109,8 @@ class AuthScreen extends Component {
      */
     render() {
         return (
-            <ScrollView
-                scrollEnabled={false}
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.container}
+            <DefaultScrollView
+                style={styles.container}
             >
                 {
                     !this.state.fetchingAuthorization &&
@@ -188,7 +184,7 @@ class AuthScreen extends Component {
                         />
                     </KeyboardAvoidingView>
                 }
-            </ScrollView>
+            </DefaultScrollView>
         );
     }
 
@@ -233,14 +229,10 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        flex: 1,
-        paddingBottom: 20,
-        paddingTop: 20,
-        backgroundColor: '#293046',
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
         alignItems: 'center',
         justifyContent: 'space-around',
+        paddingBottom: 20,
+        paddingTop: 20,
     },
 
     formContainer: {

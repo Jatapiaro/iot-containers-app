@@ -12,7 +12,7 @@ const StartMainTabs = () => {
                     options: {
                         bottomTabs: {
                             animate: true,
-                            backgroundColor: "#293046"
+                            backgroundColor: "#fc7b0d"
                         }
                     },
                     children: [
@@ -37,7 +37,7 @@ const StartMainTabs = () => {
                                                     selectedTextColor: "#fff",
                                                     icon: res[0],
                                                     iconColor: '#fff',
-                                                    selectedIconColor: '#fc7b0d',
+                                                    selectedIconColor: '#293046',
                                                 }
                                             }
                                         },
@@ -66,7 +66,7 @@ const StartMainTabs = () => {
                                                     selectedTextColor: "#fff",
                                                     icon: res[1],
                                                     iconColor: '#fff',
-                                                    selectedIconColor: '#fc7b0d',
+                                                    selectedIconColor: '#293046',
                                                 }
                                             }
                                         },

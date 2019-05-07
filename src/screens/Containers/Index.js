@@ -1,20 +1,52 @@
 import React from 'react';
-import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import  { connect } from 'react-redux';
+import { StyleSheet } from 'react-native';
+import { ListItem } from 'react-native-elements'
+import DefaultScrollView from '../../components/DefaultScrollView';
 
-export default class IndexScreen extends React.Component {
+const Image = { source: { uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsaB0W-sfGZUxbUHrBK5_UOsj904VhHfFFMsVop5O7ifmy-v2e" } }
+
+class IndexScreen extends React.Component {
+
+    state = {
+        containers: []
+    }
+    
+    /**
+     * Called before the screen is loaded
+     */
+    componentWillMount() {
+        this.props.containerService.all()
+            .then(res => {
+                this.setState({containers: res});
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Esta es la vista de contenedores</Text>
-            </View>
+            <DefaultScrollView>
+                {
+                    this.state.containers.map((c, i) =>
+                        <ListItem
+                            containerStyle={{borderBottomWidth: 1, borderBottomColor: "#000"}}
+                            key={i}
+                            leftAvatar={Image}
+                            title={c.name}
+                            subtitle={c.volume}
+                            onPress={() => {console.log("sdasd")}}
+                        />
+                    )
+                }
+            </DefaultScrollView>
         );
     }
 
 }
 
 const styles = StyleSheet.create({
-    container: {
-        margin: 25,
-    }
 });
+
+export default connect(null, null)(IndexScreen);

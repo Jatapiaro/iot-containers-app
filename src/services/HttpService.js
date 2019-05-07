@@ -3,11 +3,14 @@ export default class HttpService {
 
     constructor(baseUrl = "http://192.168.1.77") {
         this.baseUrl = baseUrl;
+        this.token = null;
     }
 
     makeGet(route) {
         const endpoint = this.getEndpoint(route);
-        return axios.get(endpoint).then(res => {
+        const headers = this.getHeaders();
+        console.log(headers);
+        return axios.get(endpoint, {headers: headers}).then(res => {
             return Promise.resolve(res.data.data);
         })
         .catch(err => {
@@ -48,16 +51,25 @@ export default class HttpService {
         });
     }
 
-    getHeaders(isFormData) {
+    getHeaders(isFormData = false) {
         const headers = {
             'Content-Type': (isFormData) ? 'multipart/form-data' : 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': this.token
         }
         return headers;
     }
 
     getEndpoint(route) {
-        return `${baseUrl}/api/v1${route}`;
+        return `${this.baseUrl}/api/v1${route}`;
+    }
+
+    hasToken() {
+        return this.token !== null
+    }
+
+    setToken(token) {
+        this.token = token;
     }
 
 }
