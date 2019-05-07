@@ -3,13 +3,15 @@ import {
     KeyboardAvoidingView,
     StyleSheet
 } from 'react-native';
-import { Button, Text, Icon } from 'react-native-elements';
+import { Button, Text } from 'react-native-elements';
 import DefaultScrollView from '../../components/DefaultScrollView';
+import DefaultButton from '../../components/DefaultButton';
 import FormInput from './../../components/FormInput';
 import User from '../../models/User';
 import Authorization from '../../models/Authorization';
 import StartMainTabs from './../MainTabs/StartMainTabs';
 
+import colorPalette from './../../components/ColorPalette';
 
 // Redux
 import { connect } from 'react-redux';
@@ -50,6 +52,8 @@ class AuthScreen extends Component {
 
     /**
      * Handles the value change of an input
+     * @param {*} name of the object property
+     * @param {*} value to set to that property
      */
     handleValueChange = (name, value) => {
         let user = this.state.user;
@@ -167,12 +171,10 @@ class AuthScreen extends Component {
                             }}
                         />
 
-                        <Button
-                            buttonStyle={styles.signUpButton}
-                            titleStyle={styles.signUpButtonText}
+                        <DefaultButton 
                             loading={this.state.loading}
                             title={this.state.registration? `Regístrate` : `Inicia Sesión`}
-                            icon={<Icon name="md-key" type={"ionicon"} color="#7384B4" size={25} iconStyle={styles.icon}/>}
+                            icon="md-key"
                             onPress={this.handleSignUpOrLogin}
                         />
 
@@ -204,11 +206,7 @@ class AuthScreen extends Component {
 const styles = StyleSheet.create({
 
     toggleButton: {
-        color: "#fc7b0d"
-    },
-
-    icon: {
-        color: "#fff"
+        color: colorPalette.orange
     },
 
     inputContainer: {
@@ -241,20 +239,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    signUpButton: {
-        backgroundColor: "#fc7b0d",
-        width: 250,
-        borderRadius: 50,
-        height: 45,
-    },
-
-    signUpButtonText: {
-        fontSize: 20,
-        marginLeft: 10
-    },
-
     text: {
-        color: "#fff",
+        color: colorPalette.white,
     }
 
 

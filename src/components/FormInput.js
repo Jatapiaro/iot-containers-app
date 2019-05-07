@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon, Input } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 
-export const FormInput = props => {
+const FormInput = props => {
     const { icon, refInput, ...otherProps } = props;
     return (
         <Input

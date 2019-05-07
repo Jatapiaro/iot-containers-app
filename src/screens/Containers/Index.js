@@ -1,15 +1,30 @@
 import React from 'react';
 import  { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { ListItem } from 'react-native-elements'
 import DefaultScrollView from '../../components/DefaultScrollView';
+import { Navigation } from 'react-native-navigation';
+import colorPalette from './../../components/ColorPalette';
 
-const Image = { source: { uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsaB0W-sfGZUxbUHrBK5_UOsj904VhHfFFMsVop5O7ifmy-v2e" } }
+const Image = { 
+    source: { 
+        uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsaB0W-sfGZUxbUHrBK5_UOsj904VhHfFFMsVop5O7ifmy-v2e" 
+    } 
+}
 
 class IndexScreen extends React.Component {
 
     state = {
         containers: []
+    }
+
+    /**
+     * Constructor
+     */
+    constructor(props) {
+        super(props);
+        // Binds the events related to naigation
+        Navigation.events().bindComponent(this);
     }
     
     /**
@@ -25,21 +40,46 @@ class IndexScreen extends React.Component {
             });
     }
 
+    /**
+     * Handler of some navigation button presses
+     * @param {*} buttonId of the pressed button
+     */
+    navigationButtonPressed(navigationEvent) {
+        if (navigationEvent.buttonId === "showCreateContainerScreen") {
+            console.log("Cambia de screen");
+            Navigation.push(this.props.componentId, {
+                component: {
+                    name: 'containers-app.ContainersCreateScreen',
+                    options: {
+                        topBar: {
+                            title: {
+                                text: "Crear Contenedor",
+                                color: colorPalette.white
+                            },
+                            background: {
+                                color: colorPalette.darkBlue
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
     render() {
         return (
-            <DefaultScrollView>
-                {
-                    this.state.containers.map((c, i) =>
+            <DefaultScrollView style={styles.container}>
+                <FlatList
+                    data={this.state.containers}
+                    renderItem={(data) => (
                         <ListItem
                             containerStyle={{borderBottomWidth: 1, borderBottomColor: "#000"}}
-                            key={i}
                             leftAvatar={Image}
-                            title={c.name}
-                            subtitle={c.volume}
-                            onPress={() => {console.log("sdasd")}}
+                            title={data.item.name}
+                            subtitle={data.item.volume}
+                            onPress={() => {console.log("ok")}}
                         />
-                    )
-                }
+                    )}/>
             </DefaultScrollView>
         );
     }
@@ -47,6 +87,12 @@ class IndexScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        borderTopWidth: 2,
+        borderBottomWidth: 1,
+        borderTopColor: colorPalette.orange,
+        borderBottomColor: colorPalette.orange
+    }
 });
 
 export default connect(null, null)(IndexScreen);

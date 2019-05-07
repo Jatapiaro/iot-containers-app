@@ -5,11 +5,13 @@ import {
     StyleSheet
 } from 'react-native';
 
+import colorPalette from './ColorPalette';
+
 // Get screen dimentions
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-export const DefaultScrollView = props => {
+const DefaultScrollView = props => {
     return (
         <ScrollView
             scrollEnabled={false}
@@ -25,7 +27,7 @@ export const DefaultScrollView = props => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#293046',
+        backgroundColor: colorPalette.darkBlue,
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
     },

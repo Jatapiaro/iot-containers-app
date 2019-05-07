@@ -5,6 +5,7 @@ import { Navigation } from 'react-native-navigation';
 import AuthScreen from './src/screens/Auth/Auth';
 import ProfileScreen from './src/screens/Profile/Profile';
 import ContainersIndexScreen from './src/screens/Containers/Index';
+import ContainersCreateScreen from './src/screens/Containers/Create';
 
 // Services
 import HttpService from './src/services/HttpService';
@@ -53,15 +54,25 @@ Navigation.registerComponent("containers-app.ProfileScreen", () => (props) => (
 		/>
 	</Provider>
 ), () => ProfileScreen);
+/**
+ * Containers
+ */
 Navigation.registerComponent("containers-app.ContainersIndexScreen", () => (props) => (
 	<Provider store={store}>
 		<ContainersIndexScreen
 			{...props}
-			asyncStorageService={asyncStorageService}
 			containerService={containerService}
 		/>
 	</Provider>
 ), () => ContainersIndexScreen);
+Navigation.registerComponent("containers-app.ContainersCreateScreen", () => (props) => (
+	<Provider store={store}>
+		<ContainersCreateScreen
+			{...props}
+			containerService={containerService}
+		/>
+	</Provider>
+), () => ContainersCreateScreen);
 
 
 // Start the app
