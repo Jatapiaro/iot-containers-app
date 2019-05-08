@@ -11,6 +11,9 @@ import FormInput from '../../components/FormInput';
 // Models
 import Container from '../../models/Container';
 
+// Navigation
+import { Navigation } from 'react-native-navigation';
+
 // Redux
 import  { connect } from 'react-redux';
 import { setContainer } from './../../store/actions/Index';
@@ -49,6 +52,7 @@ class CreateScreen extends React.Component {
         this.props.containerService.store(this.state.container)
             .then(res => {
                 this.props.setContainer(res);
+                Navigation.pop(this.props.componentId);
             })
             .catch(err => {
                 console.log(err.errors);
@@ -131,8 +135,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         paddingBottom: 20,
         paddingTop: 20,
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
         borderTopColor: colorPalette.orange,
         borderBottomColor: colorPalette.orange
     },

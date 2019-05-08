@@ -4,14 +4,19 @@ import {
     StyleSheet
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
+
+// Custom components
+import colorPalette from './../../components/ColorPalette';
 import DefaultScrollView from '../../components/DefaultScrollView';
 import DefaultButton from '../../components/DefaultButton';
 import FormInput from './../../components/FormInput';
+
+// Models
 import User from '../../models/User';
 import Authorization from '../../models/Authorization';
-import StartMainTabs from './../MainTabs/StartMainTabs';
 
-import colorPalette from './../../components/ColorPalette';
+// Navigation helpers
+import StartMainTabs from './../MainTabs/StartMainTabs';
 
 // Redux
 import { connect } from 'react-redux';

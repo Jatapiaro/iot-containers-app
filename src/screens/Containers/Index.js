@@ -43,7 +43,7 @@ class IndexScreen extends React.Component {
 
     /**
      * Handler of some navigation button presses
-     * @param {*} buttonId of the pressed button
+     * @param {*} navigationEvent of the pressed button
      */
     navigationButtonPressed(navigationEvent) {
         if (navigationEvent.buttonId === "showCreateContainerScreen") {
@@ -67,18 +67,51 @@ class IndexScreen extends React.Component {
         }
     }
 
+    /**
+     * Goes to the show view of a container
+     * @param {*} index 
+     */
+    showContainer = (index) => {
+        let container = this.props.containers[index];
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'containers-app.ContainersShowScreen',
+                passProps: {
+                    container: container
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: `Contenedor`,
+                            color: colorPalette.white
+                        },
+                        background: {
+                            color: colorPalette.darkBlue
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     render() {
         return (
             <DefaultScrollView style={styles.container}>
                 <FlatList
                     data={this.props.containers}
-                    renderItem={(data) => (
+                    renderItem={({item, index}) => (
                         <ListItem
                             containerStyle={{borderBottomWidth: 1, borderBottomColor: "#000"}}
+                            key={item.id}
                             leftAvatar={Image}
-                            title={data.item.name}
-                            subtitle={data.item.volume}
-                            onPress={() => {console.log("ok")}}
+                            onPress={() => {this.showContainer(index)}}
+                            rightIcon={{ name: "ios-eye", type: "ionicon" }}
+                            subtitle={
+                                `${item.dummy === true? 'Por favor configura tu dispositivo' : 'Contenido actual: '}`
+                            }
+                            subtitleStyle={(item.dummy == true)? [styles.configurationText, styles.subtitule] : styles.subtitule}
+                            title={item.name}
+                            titleStyle={styles.title}
                         />
                     )}/>
             </DefaultScrollView>
@@ -90,9 +123,18 @@ class IndexScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         borderTopWidth: 2,
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderTopColor: colorPalette.orange,
         borderBottomColor: colorPalette.orange
+    },
+    title: {
+        fontSize: 16,
+    },
+    subtitule: {
+        fontSize: 10
+    },
+    configurationText: {
+        color: colorPalette.danger
     }
 });
 

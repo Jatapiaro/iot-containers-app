@@ -8,7 +8,7 @@ import colorPalette from './ColorPalette';
 const DefaultButton = props => {
     return (
         <Button 
-            buttonStyle={styles.button}
+            buttonStyle={[styles.button, props.style]}
             titleStyle={styles.buttonText}
             loading={props.loading}
             title={props.title}

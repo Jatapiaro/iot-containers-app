@@ -6,6 +6,8 @@ import AuthScreen from './src/screens/Auth/Auth';
 import ProfileScreen from './src/screens/Profile/Profile';
 import ContainersIndexScreen from './src/screens/Containers/Index';
 import ContainersCreateScreen from './src/screens/Containers/Create';
+import ContainersShowScreen from './src/screens/Containers/Show';
+import ContainersConfigureDeviceScreen from './src/screens/Containers/ConfigureDevice';
 
 // Services
 import HttpService from './src/services/HttpService';
@@ -73,6 +75,21 @@ Navigation.registerComponent("containers-app.ContainersCreateScreen", () => (pro
 		/>
 	</Provider>
 ), () => ContainersCreateScreen);
+Navigation.registerComponent("containers-app.ContainersShowScreen", () => (props) => (
+	<Provider store={store}>
+		<ContainersShowScreen
+			{...props}
+		/>
+	</Provider>
+), () => ContainersShowScreen);
+Navigation.registerComponent("containers-app.ContainersConfigureDeviceScreen", () => (props) => (
+	<Provider store={store}>
+		<ContainersConfigureDeviceScreen
+			{...props}
+		/>
+	</Provider>
+), () => ContainersConfigureDeviceScreen);
+
 
 
 // Start the app
