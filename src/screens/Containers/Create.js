@@ -1,12 +1,19 @@
 import React from 'react';
-import  { connect } from 'react-redux';
+import { Text } from 'react-native-elements'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { Button, Text } from 'react-native-elements'
+
+// Custom component
 import DefaultScrollView from '../../components/DefaultScrollView';
-import FormInput from '../../components/FormInput';
 import colorPalette from './../../components/ColorPalette';
-import Container from '../../models/Container';
 import DefaultButton from '../../components/DefaultButton';
+import FormInput from '../../components/FormInput';
+
+// Models
+import Container from '../../models/Container';
+
+// Redux
+import  { connect } from 'react-redux';
+import { setContainer } from './../../store/actions/Index';
 
 class CreateScreen extends React.Component {
 
@@ -15,6 +22,13 @@ class CreateScreen extends React.Component {
         errors: {
 
         }
+    }
+
+    getError = (name) => {
+        if (this.state.errors[name]) {
+            return this.state.errors[name].join('. ');
+        }
+        return null;
     }
 
     /**
@@ -26,6 +40,22 @@ class CreateScreen extends React.Component {
         let container = this.state.container;
         container[name] = value;
         this.setState({container: container});
+    }
+
+    /**
+     * Sends the container data to the backend
+     */
+    storeContainer = () => {
+        this.props.containerService.store(this.state.container)
+            .then(res => {
+                this.props.setContainer(res);
+            })
+            .catch(err => {
+                console.log(err.errors);
+                this.setState({
+                    errors: err.errors
+                });
+            });
     }
 
     /**
@@ -49,7 +79,7 @@ class CreateScreen extends React.Component {
                         placeholder="Nombre (Casa / Oficina)"
                         returnKeyType="next"
                         errorMessage={
-                            (typeof this.state.errors.name !== undefined) ? null : "El nombre del contenedor no puede estar vacio"
+                            this.getError("container.name")
                         }
                         onSubmitEditing={() => {
                         }}
@@ -62,7 +92,7 @@ class CreateScreen extends React.Component {
                         placeholder="Altura del contenedor en metros"
                         returnKeyType="next"
                         errorMessage={
-                            (typeof this.state.errors.name !== undefined) ? null : "El nombre del contenedor no puede estar vacio"
+                            this.getError("container.height")
                         }
                         onSubmitEditing={() => {
                         }}
@@ -75,7 +105,7 @@ class CreateScreen extends React.Component {
                         placeholder="Radio del contenedor en metros"
                         returnKeyType="next"
                         errorMessage={
-                            (typeof this.state.errors.name !== undefined) ? null : "El nombre del contenedor no puede estar vacio"
+                            this.getError("container.radius")
                         }
                         onSubmitEditing={() => {
                         }}
@@ -85,7 +115,7 @@ class CreateScreen extends React.Component {
                         loading={false}
                         title={"Crear Contenedor"}
                         icon="ios-add-circle"
-                        onPress={() => {console.log("Creating")}}
+                        onPress={this.storeContainer}
                     />
 
                 </KeyboardAvoidingView>
@@ -116,4 +146,9 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(null, null)(CreateScreen);
+const mapDispatchToProps = dispatch => {
+    return {
+        setContainer: (container) => dispatch(setContainer(container))
+    };
+};
+export default connect(null, mapDispatchToProps)(CreateScreen);

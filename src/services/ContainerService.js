@@ -12,7 +12,24 @@ export default class ContainerService {
             })
             .catch(err => {
                 return Promise.reject(err);
+            });
+    }
+
+    store(container) {
+        const data = this.getData(container);
+        return this.httpService.makePost(this.route, data)
+            .then(res => {
+                return Promise.resolve(res);
             })
+            .catch(err => {
+                return Promise.reject(err);
+            });
+    }
+
+    getData(container) {
+        return {
+            container: container
+        }
     }
 
 }

@@ -1,22 +1,23 @@
 import React from 'react';
-import  { connect } from 'react-redux';
-import { FlatList, StyleSheet } from 'react-native';
 import { ListItem } from 'react-native-elements'
-import DefaultScrollView from '../../components/DefaultScrollView';
+import { FlatList, StyleSheet } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+
+// Custom components
+import DefaultScrollView from '../../components/DefaultScrollView';
 import colorPalette from './../../components/ColorPalette';
+
+// Redux
+import  { connect } from 'react-redux';
+import { setContainers } from './../../store/actions/Index';
 
 const Image = { 
     source: { 
         uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsaB0W-sfGZUxbUHrBK5_UOsj904VhHfFFMsVop5O7ifmy-v2e" 
     } 
-}
+};
 
 class IndexScreen extends React.Component {
-
-    state = {
-        containers: []
-    }
 
     /**
      * Constructor
@@ -33,7 +34,7 @@ class IndexScreen extends React.Component {
     componentWillMount() {
         this.props.containerService.all()
             .then(res => {
-                this.setState({containers: res});
+                this.props.setContainers(res.reverse());
             })
             .catch(err => {
                 console.log(err);
@@ -70,7 +71,7 @@ class IndexScreen extends React.Component {
         return (
             <DefaultScrollView style={styles.container}>
                 <FlatList
-                    data={this.state.containers}
+                    data={this.props.containers}
                     renderItem={(data) => (
                         <ListItem
                             containerStyle={{borderBottomWidth: 1, borderBottomColor: "#000"}}
@@ -95,4 +96,14 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(null, null)(IndexScreen);
+const mapStateToProps = state => {
+    return {
+        containers: state.containers.containers,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        setContainers: (containers) => dispatch(setContainers(containers))
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(IndexScreen);
