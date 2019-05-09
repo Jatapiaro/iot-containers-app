@@ -20,7 +20,7 @@ import StartMainTabs from './../MainTabs/StartMainTabs';
 
 // Redux
 import { connect } from 'react-redux';
-import { setAuthorization } from './../../store/actions/Index';
+import { setAuthorization, setProfile } from './../../store/actions/Index';
 
 // Get screen dimentions
 const STORAGE_KEY = 'authorization';
@@ -44,10 +44,23 @@ class AuthScreen extends Component {
                 if (res === null || typeof res === 'undefined') {
                     console.log("No tiene el elemento");
                 } else {
-                    //If we have the data, we go to the next view.
+
+                    /**
+                     * To simplify things, if we have the authorization
+                     * we fetch the profile data and then go to the next 
+                     * screen
+                     */
                     this.props.setAuthorizationData(JSON.parse(res));
-                    // Load the main screen
-                    StartMainTabs();
+
+                    this.props.profileService.me()
+                        .then(res => {
+                            this.props.setProfileData(res);
+                            // Load the main screen
+                            StartMainTabs();
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
                 }
             })
             .catch(err => {
@@ -76,10 +89,19 @@ class AuthScreen extends Component {
                 let authorization = new Authorization(res);
                 this.props.asyncStorageService.store(STORAGE_KEY, authorization)
                     .then(res => {
+
                         // We also add the authorization data to the reducers to avoid async storage
                         this.props.setAuthorizationData(authorization);
-                        this.setState({loading: false});
-                        StartMainTabs();
+
+                        this.props.profileService.me()
+                            .then(res => {
+                                this.props.setProfileData(res);
+                                this.setState({loading: false});
+                                StartMainTabs();
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
                     })
                     .catch(err => {
                         console.log(err);
@@ -253,7 +275,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        setAuthorizationData: authorization => dispatch(setAuthorization(authorization))
+        setAuthorizationData: authorization => dispatch(setAuthorization(authorization)),
+        setProfileData: profile => dispatch(setProfile(profile)),
     }
 };
 export default connect(null, mapDispatchToProps)(AuthScreen);

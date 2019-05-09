@@ -34,6 +34,10 @@
 		<dict>
 			<key>192.168.1.77</key>
 			<string></string>
+			<key>api.particle.io</key>
+			<string></string>
+			<key>https://api.particle.io</key>
+			<string></string>
 			<key>localhost</key>
 			<string></string>
 		</dict>

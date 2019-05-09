@@ -1,9 +1,10 @@
 import {
-    SET_AUTHORIZATION, REMOVE_AUTHORIZATION
+    SET_AUTHORIZATION, REMOVE_AUTHORIZATION, SET_PROFILE
 } from './../actions/ActionTypes';
 
 const initialState = {
-    authorization: null
+    authorization: null,
+    profile: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -17,8 +18,18 @@ const reducer = (state = initialState, action) => {
         case REMOVE_AUTHORIZATION:
             return  {
                 ...state,
-                authorization: null
+                authorization: null,
+                profile: null
             };
+        case SET_PROFILE:
+            return {
+                ...state,
+                profile: {
+                    id: action.profile.id,
+                    name: action.profile.name,
+                    email: action.profile.email
+                }
+            }
         default:
             return state;
     }

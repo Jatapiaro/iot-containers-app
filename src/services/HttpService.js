@@ -9,7 +9,6 @@ export default class HttpService {
     makeGet(route) {
         const endpoint = this.getEndpoint(route);
         const headers = this.getHeaders();
-        console.log(headers);
         return axios.get(endpoint, {headers: headers}).then(res => {
             return Promise.resolve(res.data.data);
         })

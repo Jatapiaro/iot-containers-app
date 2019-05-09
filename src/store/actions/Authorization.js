@@ -1,6 +1,7 @@
 import {
     SET_AUTHORIZATION,
-    REMOVE_AUTHORIZATION
+    REMOVE_AUTHORIZATION,
+    SET_PROFILE
 } from './ActionTypes';
 
 export const setAuthorization = (authorization) => {
@@ -13,5 +14,12 @@ export const setAuthorization = (authorization) => {
 export const removeAuthorization = () => {
     return {
         type: REMOVE_AUTHORIZATION
+    }
+}
+
+export const setProfile = (profile) => {
+    return {
+        type: SET_PROFILE,
+        profile: profile
     }
 }

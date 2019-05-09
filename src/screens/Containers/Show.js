@@ -20,37 +20,52 @@ class ShowScreen extends React.Component {
     }
 
     showConfigureDeviceModal = () => {
-        Icon.getImageSource('ios-close-circle', 30, colorPalette.danger)
-            .then((res) => {
-                Navigation.showModal({
-                    stack: {
-                        children: [{
-                            component: {
-                                name: 'containers-app.ContainersConfigureDeviceScreen',
-                                passProps: {
-                                    text: 'stack with one child'
-                                },
-                                options: {
-                                    topBar: {
-                                        title: {
-                                            text: 'Configurar Dispositivo'
-                                        },
-                                        leftButtons: [
-                                            {
-                                                id: 'cancelDeviceConfiguration',
-                                                icon: res
-                                            }
-                                        ],
-                                    }
-                                }
-                            }
-                        }]
-                    }
-                });
+        this.getClaimCode();
+    }
+
+    getClaimCode() {
+        this.props.photonParticleService.claimCode()
+            .then(res => {
+                let claimCode = res.claim_code;
+                this.openModal(claimCode);
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
             });
+    }
+
+    openModal(claimCode) {
+        Icon.getImageSource('ios-close-circle', 30, colorPalette.danger)
+        .then((res) => {
+            Navigation.showModal({
+                stack: {
+                    children: [{
+                        component: {
+                            name: 'containers-app.ContainersConfigureDeviceScreen',
+                            passProps: {
+                                claimCode: claimCode
+                            },
+                            options: {
+                                topBar: {
+                                    title: {
+                                        text: 'Configurar Dispositivo'
+                                    },
+                                    leftButtons: [
+                                        {
+                                            id: 'cancelDeviceConfiguration',
+                                            icon: res
+                                        }
+                                    ],
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
 
     render() {

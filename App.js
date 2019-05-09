@@ -11,30 +11,49 @@ import ContainersConfigureDeviceScreen from './src/screens/Containers/ConfigureD
 
 // Services
 import HttpService from './src/services/HttpService';
+import ProfileService from './src/services/ProfileService';
 import ContainerService from './src/services/ContainerService';
 import OauthService from './src/services/OAuthService';
 import AsyncStorageService from './src/services/AsyncStorageService';
+import SoftapService from './src/services/SoftapService';
 
 // Redux
 import { Provider } from 'react-redux';
 import ConfigureStore from './src/store/ConfigureStore';
+import PhotonParticleService from './src/services/PhotonParticleService';
+
 const store = ConfigureStore();
 
 // Singleton services
 const httpService = new HttpService();
+const profileService = new ProfileService(httpService);
 const containerService = new ContainerService(httpService);
 const asyncStorageService = new AsyncStorageService();
 const authorizationService = new OauthService();
+const softapService = new SoftapService();
+const photonParticleService = new PhotonParticleService();
 
 /**
  * Suscribe to the store to avoid passing the token to all requests
  */
 store.subscribe(() => {
+
+	// Auth token
 	let token = (store.getState().authorization.authorization !== null)? store.getState().authorization.authorization.full_token : null;
 	let hasToken = httpService.hasToken();
 	if (!hasToken && (typeof token !== 'undefined' || token !== null)) {
 		httpService.setToken(token);
 	}
+
+	/**
+	 * Sets the email for the photon particle calls
+	 */
+	let email = (store.getState().authorization.profile !== null)? store.getState().authorization.profile.email : null;
+	let hasEmail = photonParticleService.hasCostumerEmail();
+	if (!hasEmail && (typeof email !== 'undefined' || email !== null)) {
+		photonParticleService.setCostumerEmail(email);
+	}
+	
 });
 
 
@@ -44,6 +63,7 @@ Navigation.registerComponent("containers-app.AuthScreen", () => (props) => (
 		<AuthScreen
 			{...props}
 			authorizationService={authorizationService}
+			profileService={profileService}
 			asyncStorageService={asyncStorageService}
 		/>
 	</Provider>
@@ -79,6 +99,7 @@ Navigation.registerComponent("containers-app.ContainersShowScreen", () => (props
 	<Provider store={store}>
 		<ContainersShowScreen
 			{...props}
+			photonParticleService={photonParticleService}
 		/>
 	</Provider>
 ), () => ContainersShowScreen);
@@ -86,6 +107,7 @@ Navigation.registerComponent("containers-app.ContainersConfigureDeviceScreen", (
 	<Provider store={store}>
 		<ContainersConfigureDeviceScreen
 			{...props}
+			softapService={softapService}
 		/>
 	</Provider>
 ), () => ContainersConfigureDeviceScreen);

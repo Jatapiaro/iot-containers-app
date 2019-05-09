@@ -1,6 +1,7 @@
 export {
     setAuthorization,
-    removeAuthorization
+    removeAuthorization,
+    setProfile
 } from './Authorization';
 
 export {
