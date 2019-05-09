@@ -81,7 +81,7 @@ export default class SoftapService {
                             "Content-Type": "application/x-www-form-urlencoded"
                         }
                         let body2 = {idx: 0}
-                        return axios.post(`${this.ap_url}/connect-ap`, JSON.stringify(body), {headers: headers})
+                        return axios.post(`${this.ap_url}/connect-ap`, JSON.stringify(body2), {headers: headers})
                             .then(res => {
                                 alert(JSON.stringify(res));
                                 return Promise.resolve(res);
@@ -104,10 +104,11 @@ export default class SoftapService {
         const headers = {
             "Content-Type": "application/x-www-form-urlencoded"
         };
-        let body = new URLSearchParams();
-        body.append("k", 'cc');
-        body.append("v", cc);
-        return axios.post(route, body, headers)
+        let body = {
+            "k": 'cc',
+            "v": cc
+        };
+        return axios.post(route, JSON.stringify(body), {headers: headers})
             .then(res => {
                 alert("Claim code setted");
                 return Promise.resolve(res);
