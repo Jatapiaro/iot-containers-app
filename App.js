@@ -126,7 +126,8 @@ Navigation.events().registerAppLaunchedListener(() => {
 							name: 'containers-app.AuthScreen',
 							options: {
 								topBar: {
-									visible: false
+									visible: false,
+									height: 0
 								}
 							}
 						}

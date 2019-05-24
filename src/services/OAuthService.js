@@ -1,7 +1,7 @@
 import axios from 'axios';
 export default class OauthService {
 
-    constructor(route="http://192.168.1.77") {
+    constructor(route="http://192.168.1.71") {
         this.route = `${route}/oauth/token`;
     }
 

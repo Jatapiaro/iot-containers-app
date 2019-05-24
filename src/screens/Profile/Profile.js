@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import colorPalette from './../../components/ColorPalette';
 
 // Redux
 import { connect } from 'react-redux';
@@ -37,10 +38,12 @@ class ProfileScreen extends React.Component {
                             }
                         },
                         topBar: {
-                            visible: false
+                            visible: false,
+                            height: 0,
                         },
                         bottomTabs: {
-                            visible: false
+                            visible: false,
+                            height: 0,
                         }
                     }
                 }

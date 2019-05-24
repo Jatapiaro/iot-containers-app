@@ -1,7 +1,7 @@
 import axios from 'axios';
 export default class HttpService {
 
-    constructor(baseUrl = "http://192.168.1.77") {
+    constructor(baseUrl = "http://192.168.1.71") {
         this.baseUrl = baseUrl;
         this.token = null;
     }

@@ -37,5 +37,19 @@ $ yarn install
 
 6. Run the project
 At this stage of the project there is not a server for the bakend. Be sure to install it and then change the URL of the HttpService and OauthService to your ip and port. I'll document how to install the backend using AMPPS so you don't need to use the port. 
-Anyway, in OSX, dowload XCode, clic on the `ios/project.xcodeproject`,  select a Sign Team, and then clic on run.
-In android, I don't know, I'll check it out.
+Anyway.
+
+Please run the following commmand before run in your device.
+```shell
+$ yarn start
+```
+
+In: 
+OSX, dowload XCode, clic on the `ios/project.xcodeproject`,  select a Sign Team, and then clic on run.
+
+In android:
+    1. Install Android Studio, click on open existing project and open the `android` folder that is inside the React Native project.
+    2. The following instructions only work on OSX, I don't know how this would work on windows
+    3. In iOS `cd ~/Library/Android/sdk/platform-tools` and then `./adb reverse tcp:8081 tcp:8081`
+    4. Re run android app
+    5. Turn off reverse port `a./db forward --remove-all`

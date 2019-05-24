@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {
     KeyboardAvoidingView,
-    StyleSheet
+    StyleSheet,
+    Platform
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 
@@ -147,6 +148,7 @@ class AuthScreen extends Component {
                     !this.state.fetchingAuthorization &&
                     <KeyboardAvoidingView
                         behavior="position"
+                        keyboardVerticalOffset={Platform.OS === 'ios'? -200 : 0}
                         contentContainerStyle={styles.formContainer}
                     >
 
