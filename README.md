@@ -54,7 +54,7 @@ Until this point the following instructions only work for OSX, in Windows I don'
 ### Running the app using an Android device and OSX as the computer OS
 1. Install Android Studio, click on open existing project and open the `android` folder that is inside the React Native project.
 2. The following instructions only work on OSX, I don't know how this would work on windows
-3. In iOS `cd ~/Library/Android/sdk/platform-tools` and then `./adb reverse tcp:8081 tcp:8081`
+3. In OSX `cd ~/Library/Android/sdk/platform-tools` and then `./adb reverse tcp:8081 tcp:8081`
 4. Re run android app
 5. Turn off reverse port `a./db forward --remove-all`
 
