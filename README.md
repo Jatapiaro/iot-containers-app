@@ -45,7 +45,7 @@ $ yarn start
 ```
 
 ## Runining the app on iOS
-OSX, dowload XCode, clic on the `ios/project.xcodeproject`,  select a Sign Team, and then clic on run.
+Download XCode, clic on the `ios/project.xcodeproject`,  select a Sign Team, and then clic on run.
 
 ## Running the app on Android
 Until this point the following instructions only work for OSX, in Windows I don't know the running procedure.
