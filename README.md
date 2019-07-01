@@ -62,3 +62,11 @@ Until this point the following instructions only work for OSX, in Windows I don'
 1. Never Ever Ever Develop On Master
 2. Always code in english
 3. Always create a new branch for your tasks. **Do not develop on master** 
+
+# Enabling the remote debugger
+For some reason the application stucks when you enable the remote debugger. So when you enable it, a new tab in your browser will open.
+
+1. Close the new open tab in your browser
+2. Open that atb using `http://{{your_ip}}:8081/debugger-ui/`
+3. Reloads until it says that one session is enabled
+4. Reload your app or click on reload js on your device until the app runs normally.
