@@ -56,8 +56,8 @@ export default class SoftapService {
                 const keyExpString = b.slice(159 * 2, 162 * 2);
                 let rsa = new RSAKey();
                 const publicKey = {
-                  n: keyModString,
-                  e: keyExpString
+                    n: keyModString,
+                    e: keyExpString
                 };
                 publicKeyString = JSON.stringify(publicKey);
                 rsa.setPublicString(publicKeyString);

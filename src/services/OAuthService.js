@@ -1,7 +1,7 @@
 import axios from 'axios';
 export default class OauthService {
 
-    constructor(route="http://192.168.1.71") {
+    constructor(route="http://192.168.1.81") {
         this.route = `${route}/oauth/token`;
     }
 
@@ -10,6 +10,7 @@ export default class OauthService {
         const body = this.getBody(username, password);
         return axios.post(this.route, body, {headers: headers})
             .then(res => {
+                console.log(res.data);
                 return Promise.resolve(res.data);
             })
             .catch((err) => {
