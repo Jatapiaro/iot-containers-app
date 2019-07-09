@@ -56,7 +56,7 @@ Until this point the following instructions only work for OSX, in Windows I don'
 2. The following instructions only work on OSX, I don't know how this would work on windows
 3. In OSX `cd ~/Library/Android/sdk/platform-tools` and then `./adb reverse tcp:8081 tcp:8081`
 4. Re run android app
-5. Turn off reverse port `a./db forward --remove-all`
+5. Turn off reverse port `./adb forward --remove-all`
 
 # Development Recomendations
 1. Never Ever Ever Develop On Master
