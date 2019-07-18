@@ -23,7 +23,7 @@ import StartMainTabs from './../MainTabs/StartMainTabs';
 import { connect } from 'react-redux';
 import { setAuthorization, setProfile } from './../../store/actions/Index';
 
-// Get screen dimentions
+// LOCAL STORAGE KEY
 const STORAGE_KEY = 'authorization';
 
 class AuthScreen extends Component {
@@ -37,6 +37,13 @@ class AuthScreen extends Component {
             loading: false,
             fetchingAuthorization: false,
         };
+        this.inputRefs = {
+            name: React.createRef(),
+            email: React.createRef(),
+            password: React.createRef(),
+            password_confirmation: React.createRef(),
+        }
+        console.log(this.inputRefs);
     }
 
     componentWillMount() {
@@ -45,7 +52,6 @@ class AuthScreen extends Component {
                 if (res === null || typeof res === 'undefined') {
                     console.log("No tiene el elemento");
                 } else {
-
                     /**
                      * To simplify things, if we have the authorization
                      * we fetch the profile data and then go to the next 
@@ -70,13 +76,29 @@ class AuthScreen extends Component {
     }
 
     /**
+     * Gets the specified error
+     * 
+     * @return error as string
+     */
+    getErrors = (key) => {
+        /**
+         * Errors are returned from the server as arrays
+         * we need to join them on a single string
+         */
+        if (this.state.errors[key]) {
+            return this.state.errors[key].join('. ');
+        }
+        return "";
+    }
+
+    /**
      * Handles the value change of an input
      * @param {*} name of the object property
      * @param {*} value to set to that property
      */
     handleValueChange = (name, value) => {
         let user = this.state.user;
-        user[name] = value;
+        user[name] = value.trim();
         this.setState({user: user});
     }
 
@@ -85,6 +107,26 @@ class AuthScreen extends Component {
      * when the user clic on the login button
      */
     handleLogin = () => {
+
+        /**
+         * Check if the length of email and password is greater than 0
+         * If one of them is missing, stop the execution and show the errors
+         */
+        if (this.state.user.email.length === 0 || this.state.user.password.length === 0) {
+            let errors = {};
+            if (this.state.user.email.length == 0) {
+                errors['user.email'] = ['Por favor ingresa tu email'];
+            }
+            if (this.state.user.password.length == 0) {
+                errors['user.password'] = ['Por favor ingresa tu password'];
+            }
+            this.setState({
+                errors: errors,
+                loading: false
+            });
+            return;
+        }
+
         this.props.authorizationService.authorize(this.state.user.email, this.state.user.password)
             .then(res => {
                 let authorization = new Authorization(res);
@@ -103,15 +145,23 @@ class AuthScreen extends Component {
                             .catch(err => {
                                 console.log(err);
                             });
+
                     })
                     .catch(err => {
                         console.log(err);
                     });
             })
             .catch(err => {
+                
+                let errors = {
+                    "user.email": ['Los datos de acceso son incorrectos']
+                };
+                this.setState({
+                    errors: errors
+                });
+
                 /**
-                 * TODO: Remove this when the app is complete,
-                 * currently this is a way to test the ausence of authorization
+                 * Remove any authentication key in the system
                  */
                 this.props.asyncStorageService.remove(STORAGE_KEY)
                 .then(res => {
@@ -128,8 +178,33 @@ class AuthScreen extends Component {
      * the correct method
      */
     handleSignUpOrLogin = () => {
+        // Tells the button to be on loading state
         this.setState({loading: true});
         if ( this.state.registration ) {
+
+            //TODO: Implement registration
+            /**
+             * In the case of the registration, if something is wrong in the form
+             * you MUST get the errors like this: err.errors, and then assign them 
+             * to the state one by one, and trying to merge the ones that are for the same category
+             * For example if the login is wrong you'll get
+             * {
+                    "message": "The given data was invalid.",
+                    "errors": {
+                        "user.email": [
+                        "El email del usuario tiene que ser valido."
+                        ],
+                        "user.password": [
+                        "La contraseña debe tener al menos 8 caracteres"
+                        ],
+                        "user.password_confirmation": [
+                        "The user.password confirmation must be at least 8 characters."
+                        ]
+                    }
+                }
+                That is why you need to do let errors = err.errors.
+                And then set them to the errors state to be displayed
+             */
 
         } else {
             this.handleLogin();
@@ -148,7 +223,7 @@ class AuthScreen extends Component {
                     !this.state.fetchingAuthorization &&
                     <KeyboardAvoidingView
                         behavior="position"
-                        keyboardVerticalOffset={Platform.OS === 'ios'? -200 : 0}
+                        keyboardVerticalOffset={Platform.OS === 'ios'? -100 : 0}
                         contentContainerStyle={styles.formContainer}
                     >
 
@@ -165,7 +240,7 @@ class AuthScreen extends Component {
                                     placeholder="Nombre"
                                     returnKeyType="next"
                                     errorMessage={
-                                        (typeof this.state.errors.name !== undefined) ? null : "Your username can't be blank"
+                                        this.getErrors('user.name')
                                     }
                                     onSubmitEditing={() => {
                                     }}
@@ -174,6 +249,7 @@ class AuthScreen extends Component {
                         }
 
                         <FormInput
+                            refInput={this.inputRefs.name}
                             icon="ios-mail"
                             value={this.state.user.email}
                             onChangeText={(email) => {this.handleValueChange("email", email)}}
@@ -181,22 +257,25 @@ class AuthScreen extends Component {
                             keyboardType="email-address"
                             returnKeyType="next"
                             errorMessage={
-                                (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                                this.getErrors('user.email')
                             }
                             onSubmitEditing={() => {
+                                this.inputRefs.password.current.input.focus()
                             }}
                         />
 
                         <FormInput
+                            refInput={this.inputRefs.password}
                             icon="ios-lock"
                             value={this.state.user.password}
                             onChangeText={(password) => {this.handleValueChange("password", password)}}
                             placeholder="Password"
                             secureTextEntry
                             errorMessage={
-                                (typeof this.state.errors.email !== undefined) ? null : "Your username can't be blank"
+                                this.getErrors('user.password')
                             }
                             onSubmitEditing={() => {
+                                (this.state.registration)? alert('Move to password confirmation') : this.handleSignUpOrLogin();
                             }}
                         />
 
@@ -208,7 +287,7 @@ class AuthScreen extends Component {
                         />
 
                         <Button
-                            title={this.state.registration? `¿Ya tienes una cuenta? !Inicia Sesión¡` : `¿Aun no tienes cuenta? ¡Regístrate!`}
+                            title={this.state.registration? `¿Ya tienes una cuenta? ¡Inicia Sesión!` : `¿Aun no tienes cuenta? ¡Regístrate!`}
                             type="clear"
                             titleStyle={styles.toggleButton}
                             onPress={this.toggle}
@@ -225,7 +304,8 @@ class AuthScreen extends Component {
     toggle = () => {
         this.setState((prevState) => {
             return {
-                registration: !prevState.registration
+                registration: !prevState.registration,
+                errors: {} // Reset the errors map
             }
         });
     }
