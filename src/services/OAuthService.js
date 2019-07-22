@@ -1,7 +1,7 @@
 import axios from 'axios';
 export default class OauthService {
 
-    constructor(route="http://192.168.1.81") {
+    constructor(route="http://containers.totoringo.com") {
         this.route = `${route}/oauth/token`;
     }
 
@@ -21,8 +21,8 @@ export default class OauthService {
     getBody(username, password) {
         const body = {
             "grant_type": "password",
-            "client_id": 1,
-            "client_secret": "PECqI8C4abqkwqpsErcsX2SNCDErgHNqaxYrlPfS",
+            "client_id": 3,
+            "client_secret": "BVDPcxpkjwUnquUnEg2DYYF4q0qxVCVau8IzIYaI",
             "username": username,
             "password": password,
             "scope": ""
