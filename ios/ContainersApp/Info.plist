@@ -32,14 +32,19 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>192.168.1.77</key>
+			<key>https://api.particle.io</key>
 			<string></string>
 			<key>api.particle.io</key>
 			<string></string>
-			<key>https://api.particle.io</key>
-			<string></string>
 			<key>localhost</key>
 			<string></string>
+			<key>containers.totoringo.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>

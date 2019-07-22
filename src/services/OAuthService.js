@@ -10,7 +10,6 @@ export default class OauthService {
         const body = this.getBody(username, password);
         return axios.post(this.route, body, {headers: headers})
             .then(res => {
-                console.log(res.data);
                 return Promise.resolve(res.data);
             })
             .catch((err) => {
