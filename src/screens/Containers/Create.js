@@ -49,23 +49,6 @@ class CreateScreen extends React.Component {
      * Sends the container data to the backend
      */
     storeContainer = () => {
-        if(this.state.container.name.length==0 || this.state.container.height<=0 || this.state.container.radius<=0){
-            let errors={};
-            if (this.state.container.name.length==0){
-                 errors["container.name"]=["El contenedor debe tener un nombre"];
-            }
-            if (this.state.container.height<=0){
-                  errors["container.height"]=["El contenedor debe tener definido altura positiva mayor a 0"];
-            }		 
-            if(this.state.container.radius<=0){
-                  errors["container.radius"]=["El contenedor debe tener definido radio positivo mayor a 0"];
-            }
-            this.setState({
-                   errors: errors,
-                   loading: false
-               });
-            return;
-        }
         this.props.containerService.store(this.state.container)
             .then(res => {
                 this.props.setContainer(res);
