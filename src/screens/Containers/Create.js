@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native-elements'
-import { KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Platform } from 'react-native';
 
 // Custom component
 import DefaultScrollView from '../../components/DefaultScrollView';
@@ -20,6 +20,14 @@ import { setContainer } from './../../store/actions/Index';
 
 class CreateScreen extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.inputRefs={
+            name: React.createRef(),
+            height: React.createRef(),
+            radius: React.createRef(),
+        };
+    }
     state = {
         container: new Container(),
         errors: {
@@ -70,6 +78,7 @@ class CreateScreen extends React.Component {
             <DefaultScrollView style={styles.container}>
                 <KeyboardAvoidingView
                     behavior="position"
+                    keyboardVerticalOffset={Platform.OS === 'ios'? -100 : -200}
                     contentContainerStyle={styles.formContainer}>
 
                     <Text h3={true} style={styles.text}>
@@ -77,6 +86,7 @@ class CreateScreen extends React.Component {
                     </Text>
 
                     <FormInput
+                        refInput={this.inputRefs.name}
                         icon="ios-cube"
                         value={this.state.container.name}
                         onChangeText={(name) => {this.handleValueChange("name", name)}}
@@ -86,10 +96,12 @@ class CreateScreen extends React.Component {
                             this.getError("container.name")
                         }
                         onSubmitEditing={() => {
+                            this.inputRefs.height.current.input.focus()
                         }}
                     />
 
                     <FormInput
+                        refInput={this.inputRefs.height}
                         icon="ios-resize"
                         value={this.state.container.height}
                         onChangeText={(height) => {this.handleValueChange("height", height)}}
@@ -99,10 +111,12 @@ class CreateScreen extends React.Component {
                             this.getError("container.height")
                         }
                         onSubmitEditing={() => {
+                            this.inputRefs.radius.current.input.focus()
                         }}
                     />
 
                     <FormInput
+                        refInput={this.inputRefs.radius}
                         icon="logo-chrome"
                         value={this.state.container.radius}
                         onChangeText={(radius) => {this.handleValueChange("radius", radius)}}
@@ -112,6 +126,7 @@ class CreateScreen extends React.Component {
                             this.getError("container.radius")
                         }
                         onSubmitEditing={() => {
+                            this.storeContainer();
                         }}
                     />
 
