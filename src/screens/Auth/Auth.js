@@ -173,6 +173,19 @@ class AuthScreen extends Component {
             });
     }
 
+    handleRegister =() =>{
+        this.props.authorizationService.register(this.state.user)
+        .then(res =>{
+             this.handleLogin();
+        })
+        .catch(err => {
+            console.log(err.errors);
+            this.setState({
+               errors:err.errors,
+               loading: false
+            });
+        });
+    }
     /**
      * Handles the button action and triggers
      * the correct method
@@ -181,7 +194,7 @@ class AuthScreen extends Component {
         // Tells the button to be on loading state
         this.setState({loading: true});
         if ( this.state.registration ) {
-
+            this.handleRegister();
             //TODO: Implement registration
             /**
              * In the case of the registration, if something is wrong in the form
@@ -243,13 +256,14 @@ class AuthScreen extends Component {
                                         this.getErrors('user.name')
                                     }
                                     onSubmitEditing={() => {
+                                        this.inputRefs.email.current.input.focus()
                                     }}
                                 />
                             )
                         }
 
                         <FormInput
-                            refInput={this.inputRefs.name}
+                            refInput={this.inputRefs.email}
                             icon="ios-mail"
                             value={this.state.user.email}
                             onChangeText={(email) => {this.handleValueChange("email", email)}}
@@ -275,9 +289,28 @@ class AuthScreen extends Component {
                                 this.getErrors('user.password')
                             }
                             onSubmitEditing={() => {
-                                (this.state.registration)? alert('Move to password confirmation') : this.handleSignUpOrLogin();
+                                (this.state.registration)? this.inputRefs.password_confirmation.current.input.focus() : this.handleSignUpOrLogin();
                             }}
                         />
+
+                        {
+                            this.state.registration && (
+                                <FormInput
+                                    refInput={this.inputRefs.password_confirmation}
+                                    icon="ios-lock"
+                                    value={this.state.user.password_confirmation}
+                                    onChangeText={(password_confirmation) => {this.handleValueChange("password_confirmation", password_confirmation)}}
+                                    placeholder="Password confirmation"
+                                    secureTextEntry
+                                    errorMessage={
+                                        this.getErrors('user.password_confirmation')
+                                    }
+                                    onSubmitEditing={() => {
+                                        this.handleSignUpOrLogin()
+                                    }}
+                                />
+                            )
+                        }
 
                         <DefaultButton 
                             loading={this.state.loading}
