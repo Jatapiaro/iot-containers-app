@@ -176,7 +176,27 @@ class AuthScreen extends Component {
     handleRegister =() =>{
         this.props.authorizationService.register(this.state.user)
         .then(res =>{
-             this.handleLogin();
+                let authorization = new Authorization(res);
+                this.props.asyncStorageService.store(STORAGE_KEY, authorization)
+                    .then(res => {
+
+                        // We also add the authorization data to the reducers to avoid async storage
+                        this.props.setAuthorizationData(authorization);
+
+                        this.props.profileService.me()
+                            .then(res => {
+                                this.props.setProfileData(res);
+                                this.setState({loading: false});
+                                StartMainTabs();
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
         })
         .catch(err => {
             console.log(err.errors);

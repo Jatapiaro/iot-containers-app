@@ -32,10 +32,10 @@ export default class OauthService {
     }
 
     register(user){
-        const route = "/register";
+        const route = "http://containers.totoringo.com/api/v1/register";
         const data = this.getRegisterBody(user);
-        const httpService = new HttpService();
-        return httpService.makePost(route, data)
+        const headers= this.getHeaders();
+        return axios.post(route, data,{headers:headers})
             .then(res => {
                 return Promise.resolve(res);
             })
