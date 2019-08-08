@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     KeyboardAvoidingView,
     StyleSheet,
@@ -99,7 +99,7 @@ class AuthScreen extends Component {
     handleValueChange = (name, value) => {
         let user = this.state.user;
         user[name] = value.trim();
-        this.setState({user: user});
+        this.setState({ user: user });
     }
 
     /**
@@ -139,7 +139,7 @@ class AuthScreen extends Component {
                         this.props.profileService.me()
                             .then(res => {
                                 this.props.setProfileData(res);
-                                this.setState({loading: false});
+                                this.setState({ loading: false });
                                 StartMainTabs();
                             })
                             .catch(err => {
@@ -152,7 +152,7 @@ class AuthScreen extends Component {
                     });
             })
             .catch(err => {
-                
+
                 let errors = {
                     "user.email": ['Los datos de acceso son incorrectos']
                 };
@@ -164,19 +164,18 @@ class AuthScreen extends Component {
                  * Remove any authentication key in the system
                  */
                 this.props.asyncStorageService.remove(STORAGE_KEY)
-                .then(res => {
-                    this.setState({loading: false});
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+                    .then(res => {
+                        this.setState({ loading: false });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             });
     }
 
-    handleRegister =() =>{
+    handleRegister = () => {
         this.props.authorizationService.register(this.state.user)
-        .then(res =>{
-              // this.handleLogin();
+            .then(res => {
                 let authorization = new Authorization(res);
                 this.props.asyncStorageService.store(STORAGE_KEY, authorization)
                     .then(res => {
@@ -187,7 +186,7 @@ class AuthScreen extends Component {
                         this.props.profileService.me()
                             .then(res => {
                                 this.props.setProfileData(res);
-                                this.setState({loading: false});
+                                this.setState({ loading: false });
                                 StartMainTabs();
                             })
                             .catch(err => {
@@ -198,14 +197,13 @@ class AuthScreen extends Component {
                     .catch(err => {
                         console.log(err);
                     });
-        })
-        .catch(err => {
-            console.log(err.errors);
-            this.setState({
-               errors:err.errors,
-               loading: false
+            })
+            .catch(err => {
+                this.setState({
+                    errors: err.errors,
+                    loading: false
+                });
             });
-        });
     }
     /**
      * Handles the button action and triggers
@@ -213,33 +211,9 @@ class AuthScreen extends Component {
      */
     handleSignUpOrLogin = () => {
         // Tells the button to be on loading state
-        this.setState({loading: true});
-        if ( this.state.registration ) {
+        this.setState({ loading: true });
+        if (this.state.registration) {
             this.handleRegister();
-            //TODO: Implement registration
-            /**
-             * In the case of the registration, if something is wrong in the form
-             * you MUST get the errors like this: err.errors, and then assign them 
-             * to the state one by one, and trying to merge the ones that are for the same category
-             * For example if the login is wrong you'll get
-             * {
-                    "message": "The given data was invalid.",
-                    "errors": {
-                        "user.email": [
-                        "El email del usuario tiene que ser valido."
-                        ],
-                        "user.password": [
-                        "La contraseña debe tener al menos 8 caracteres"
-                        ],
-                        "user.password_confirmation": [
-                        "The user.password confirmation must be at least 8 characters."
-                        ]
-                    }
-                }
-                That is why you need to do let errors = err.errors.
-                And then set them to the errors state to be displayed
-             */
-
         } else {
             this.handleLogin();
         }
@@ -257,20 +231,20 @@ class AuthScreen extends Component {
                     !this.state.fetchingAuthorization &&
                     <KeyboardAvoidingView
                         behavior="position"
-                        keyboardVerticalOffset={Platform.OS === 'ios'? -100 : -200}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? -100 : -200}
                         contentContainerStyle={styles.formContainer}
                     >
 
                         <Text h3={true} style={styles.text}>
-                            {this.state.registration? `Regístrate` : `Inicia Sesión`}
+                            {this.state.registration ? `Regístrate` : `Inicia Sesión`}
                         </Text>
-                        
+
                         {
                             this.state.registration && (
                                 <FormInput
                                     icon="ios-contact"
                                     value={this.state.user.name}
-                                    onChangeText={(name) => {this.handleValueChange("name", name)}}
+                                    onChangeText={(name) => { this.handleValueChange("name", name) }}
                                     placeholder="Nombre"
                                     returnKeyType="next"
                                     errorMessage={
@@ -287,7 +261,7 @@ class AuthScreen extends Component {
                             refInput={this.inputRefs.email}
                             icon="ios-mail"
                             value={this.state.user.email}
-                            onChangeText={(email) => {this.handleValueChange("email", email)}}
+                            onChangeText={(email) => { this.handleValueChange("email", email) }}
                             placeholder="Email"
                             keyboardType="email-address"
                             returnKeyType="next"
@@ -303,14 +277,14 @@ class AuthScreen extends Component {
                             refInput={this.inputRefs.password}
                             icon="ios-lock"
                             value={this.state.user.password}
-                            onChangeText={(password) => {this.handleValueChange("password", password)}}
+                            onChangeText={(password) => { this.handleValueChange("password", password) }}
                             placeholder="Password"
                             secureTextEntry
                             errorMessage={
                                 this.getErrors('user.password')
                             }
                             onSubmitEditing={() => {
-                                (this.state.registration)? this.inputRefs.password_confirmation.current.input.focus() : this.handleSignUpOrLogin();
+                                (this.state.registration) ? this.inputRefs.password_confirmation.current.input.focus() : this.handleSignUpOrLogin();
                             }}
                         />
 
@@ -320,7 +294,7 @@ class AuthScreen extends Component {
                                     refInput={this.inputRefs.password_confirmation}
                                     icon="ios-lock"
                                     value={this.state.user.password_confirmation}
-                                    onChangeText={(password_confirmation) => {this.handleValueChange("password_confirmation", password_confirmation)}}
+                                    onChangeText={(password_confirmation) => { this.handleValueChange("password_confirmation", password_confirmation) }}
                                     placeholder="Password confirmation"
                                     secureTextEntry
                                     errorMessage={
@@ -333,15 +307,15 @@ class AuthScreen extends Component {
                             )
                         }
 
-                        <DefaultButton 
+                        <DefaultButton
                             loading={this.state.loading}
-                            title={this.state.registration? `Regístrate` : `Inicia Sesión`}
+                            title={this.state.registration ? `Regístrate` : `Inicia Sesión`}
                             icon="md-key"
                             onPress={this.handleSignUpOrLogin}
                         />
 
                         <Button
-                            title={this.state.registration? `¿Ya tienes una cuenta? ¡Inicia Sesión!` : `¿Aun no tienes cuenta? ¡Regístrate!`}
+                            title={this.state.registration ? `¿Ya tienes una cuenta? ¡Inicia Sesión!` : `¿Aun no tienes cuenta? ¡Regístrate!`}
                             type="clear"
                             titleStyle={styles.toggleButton}
                             onPress={this.toggle}
