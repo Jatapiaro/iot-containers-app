@@ -1,15 +1,14 @@
 import axios from 'axios';
-import HttpService from './HttpService';
 export default class OauthService {
 
-    constructor(route="http://containers.totoringo.com") {
+    constructor(route = "http://containers.totoringo.com") {
         this.route = `${route}/oauth/token`;
     }
 
     authorize(username, password) {
         const headers = this.getHeaders();
         const body = this.getBody(username, password);
-        return axios.post(this.route, body, {headers: headers})
+        return axios.post(this.route, body, { headers: headers })
             .then(res => {
                 return Promise.resolve(res.data);
             })
@@ -31,11 +30,11 @@ export default class OauthService {
         return body;
     }
 
-    register(user){
+    register(user) {
         const route = "http://containers.totoringo.com/api/v1/register";
         const data = this.getRegisterBody(user);
-        const headers= this.getHeaders();
-        return axios.post(route, data,{headers:headers})
+        const headers = this.getHeaders();
+        return axios.post(route, data, { headers: headers })
             .then(res => {
                 return Promise.resolve(res.data);
             })
@@ -43,19 +42,18 @@ export default class OauthService {
                 return Promise.reject(err.response.data);
             });
     }
-   
-    getRegisterBody(user){
+
+    getRegisterBody(user) {
         return {
-            "user":{
-                 "name": user.name,
-                 "email": user.email,
-                 "password": user.password,
-                 "password_confirmation": user.password_confirmation,
-                 "client_id": 3,
-                 "client_secret": "BVDPcxpkjwUnquUnEg2DYYF4q0qxVCVau8IzIYaI"
+            "user": {
+                "name": user.name,
+                "email": user.email,
+                "password": user.password,
+                "password_confirmation": user.password_confirmation,
+                "client_id": 3,
+                "client_secret": "BVDPcxpkjwUnquUnEg2DYYF4q0qxVCVau8IzIYaI"
             }
         }
-
     }
 
     getHeaders() {
