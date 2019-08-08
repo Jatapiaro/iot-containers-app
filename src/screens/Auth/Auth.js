@@ -176,6 +176,7 @@ class AuthScreen extends Component {
     handleRegister =() =>{
         this.props.authorizationService.register(this.state.user)
         .then(res =>{
+              // this.handleLogin();
                 let authorization = new Authorization(res);
                 this.props.asyncStorageService.store(STORAGE_KEY, authorization)
                     .then(res => {

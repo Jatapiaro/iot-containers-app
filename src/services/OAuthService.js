@@ -37,10 +37,10 @@ export default class OauthService {
         const headers= this.getHeaders();
         return axios.post(route, data,{headers:headers})
             .then(res => {
-                return Promise.resolve(res);
+                return Promise.resolve(res.data);
             })
             .catch(err => {
-                return Promise.reject(err);
+                return Promise.reject(err.response.data);
             });
     }
    
