@@ -47,7 +47,6 @@ class IndexScreen extends React.Component {
      */
     navigationButtonPressed(navigationEvent) {
         if (navigationEvent.buttonId === "showCreateContainerScreen") {
-            console.log("Cambia de screen");
             Navigation.push(this.props.componentId, {
                 component: {
                     name: 'containers-app.ContainersCreateScreen',
