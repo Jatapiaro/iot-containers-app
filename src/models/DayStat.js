@@ -25,8 +25,9 @@ export default class DayStat {
     getChartDataObject() {
         return {
             data: this.getChartData(),
-            width: 2500,
-            height: 300
+            height: 300,
+            table: this.getTableData(),
+            width: 2500
         }
     }
 
@@ -41,6 +42,31 @@ export default class DayStat {
                 data: this.data
             }]
         };
+    }
+
+    /**
+     * Returns the data formatted for a table
+     */
+    getTableData() {
+        return {
+            head: ['Hora', 'Volumen'],
+            data: this.getTableColumns()
+        }
+    }
+    
+    /**
+     * Return the data as columns to be rendered 
+     * in a table
+     */
+    getTableColumns() {
+        let columns = [];
+        for (let i = 0; i < this.labels.length; i++) {
+            columns.push([
+                this.labels[i], 
+                `${this.data[i].toFixed(2)} litros`
+            ]);
+        }
+        return columns;
     }
 
     fillWithResponseData(res) {

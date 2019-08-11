@@ -2,6 +2,8 @@ import React from 'react';
 import { Dimensions, Picker, ScrollView, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BarChart } from 'react-native-chart-kit';
+import { Table, Row, Rows } from 'react-native-table-component';
+
 
 // Custom Components
 import colorPalette from './../../components/ColorPalette';
@@ -17,6 +19,7 @@ const chartConfig = {
     strokeWidth: 3
 }
 
+
 class StatsScreen extends React.Component {
 
     state = {
@@ -29,8 +32,12 @@ class StatsScreen extends React.Component {
                     data: []
                 }]
             },
+            height: 300,
+            table: {
+                head: [],
+                data: []
+            },
             width: 2500,
-            height: 300
         }
     }
 
@@ -58,7 +65,7 @@ class StatsScreen extends React.Component {
                 // TODO add week stat,
                 // TODO add month stat,
                 // TODO add year stat
-                chartData: dayStat.getChartDataObject
+                chartData: dayStat.getChartDataObject()
             });
 
         })
@@ -127,6 +134,10 @@ class StatsScreen extends React.Component {
                         yAxisLabel={'Vol: '}
                     />
                 </ScrollView>
+                <Table style={{marginBottom: 50}} borderStyle={styles.tableBorder}>
+                    <Row data={this.state.chartData.table.head} style={styles.tableHead} textStyle={[styles.tableText, styles.tableBoldText]}/>
+                    <Rows data={this.state.chartData.table.data} textStyle={styles.tableText}/>
+                </Table>
             </ScrollView>
         );
     }
@@ -158,8 +169,24 @@ const styles = StyleSheet.create({
         height: 60,
         width: '100%'
     },
+    tableBorder: {
+        borderWidth: 2, 
+        borderColor: '#C1C0B9'
+    },
+    tableHead: { 
+        height: 40, 
+        backgroundColor: colorPalette.orange 
+    },
+    tableText: { 
+        margin: 6,
+        color: colorPalette.white,
+        textAlign: 'center'
+    },
+    tableBoldText: {
+        fontWeight: "800"
+    },
     text: {
-        color: colorPalette.white
+        color: colorPalette.white,
     },
     textCentered: {
         textAlign: 'center'
