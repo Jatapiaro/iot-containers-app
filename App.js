@@ -41,6 +41,10 @@ const photonParticleService = new PhotonParticleService();
  */
 store.subscribe(() => {
 
+	if (store.getState().authorization.authorized === false) {
+		httpService.setToken(null);
+	}
+
 	// Auth token
 	let token = (store.getState().authorization.authorization !== null)? store.getState().authorization.authorization.full_token : null;
 	let hasToken = httpService.hasToken();
@@ -114,7 +118,7 @@ Navigation.registerComponent("containers-app.ContainersConfigureDeviceScreen", (
 		/>
 	</Provider>
 ), () => ContainersConfigureDeviceScreen);
-Navigation.registerComponent("containers-app.ContainersStats", () => (props) => (
+Navigation.registerComponent("containers-app.ContainersStatsScreen", () => (props) => (
 	<Provider store={store}>
 		<ContainersStatsScreeen
 			{...props}

@@ -17,6 +17,7 @@
     "react-native-elements": "^1.1.0",
     "react-native-navigation": "^2.18.4",
     "react-native-rsa": "^0.0.3",
+    "react-native-svg": "^9.6.2",
     "react-native-vector-icons": "^6.4.2",
     "react-redux": "^7.0.3",
     "redux": "^4.0.1"

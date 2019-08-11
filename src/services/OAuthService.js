@@ -3,6 +3,8 @@ export default class OauthService {
 
     constructor(route = "http://containers.totoringo.com") {
         this.route = `${route}/oauth/token`;
+        this.clientID = 1;
+        this.clientSecret = "ztFcktqbJ0akbBV9alIOoHrwkvLE0leUlRtdbNEr";
     }
 
     authorize(username, password) {
@@ -21,8 +23,8 @@ export default class OauthService {
     getBody(username, password) {
         const body = {
             "grant_type": "password",
-            "client_id": 3,
-            "client_secret": "BVDPcxpkjwUnquUnEg2DYYF4q0qxVCVau8IzIYaI",
+            "client_id": this.clientID,
+            "client_secret": this.clientSecret,
             "username": username,
             "password": password,
             "scope": ""
@@ -50,8 +52,8 @@ export default class OauthService {
                 "email": user.email,
                 "password": user.password,
                 "password_confirmation": user.password_confirmation,
-                "client_id": 3,
-                "client_secret": "BVDPcxpkjwUnquUnEg2DYYF4q0qxVCVau8IzIYaI"
+                "client_id": this.clientID,
+                "client_secret": this.clientSecret
             }
         }
     }

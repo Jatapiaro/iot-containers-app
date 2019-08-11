@@ -4,7 +4,8 @@ import {
 
 const initialState = {
     authorization: null,
-    profile: null
+    authorized: false,
+    profile: null,
 }
 
 const reducer = (state = initialState, action) => {
@@ -13,12 +14,14 @@ const reducer = (state = initialState, action) => {
         case SET_AUTHORIZATION:
             return {
                 ...state,
-                authorization: action.authorization
+                authorization: action.authorization,
+                authorized: true
             };
         case REMOVE_AUTHORIZATION:
             return  {
                 ...state,
                 authorization: null,
+                authorized: false,
                 profile: null
             };
         case SET_PROFILE:

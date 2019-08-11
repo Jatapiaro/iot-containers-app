@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.horcrux.svg.SvgPackage;
 
 public class MainApplication extends NavigationApplication {
   
@@ -41,7 +42,7 @@ public class MainApplication extends NavigationApplication {
       // No need to add RnnPackage and MainReactPackage
       return Arrays.<ReactPackage>asList(
         new AsyncStoragePackage(),
-        new VectorIconsPackage()
+        new VectorIconsPackage(), new SvgPackage()
       );
   }
   
