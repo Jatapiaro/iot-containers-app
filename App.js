@@ -8,6 +8,7 @@ import ContainersIndexScreen from './src/screens/Containers/Index';
 import ContainersCreateScreen from './src/screens/Containers/Create';
 import ContainersShowScreen from './src/screens/Containers/Show';
 import ContainersConfigureDeviceScreen from './src/screens/Containers/ConfigureDevice';
+import ContainersStatsScreeen from './src/screens/Containers/Stats';
 
 // Services
 import HttpService from './src/services/HttpService';
@@ -16,6 +17,7 @@ import ContainerService from './src/services/ContainerService';
 import OauthService from './src/services/OAuthService';
 import AsyncStorageService from './src/services/AsyncStorageService';
 import SoftapService from './src/services/SoftapService';
+import StatService from './src/services/StatService';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -28,6 +30,7 @@ const store = ConfigureStore();
 const httpService = new HttpService();
 const profileService = new ProfileService(httpService);
 const containerService = new ContainerService(httpService);
+const statService = new StatService(httpService);
 const asyncStorageService = new AsyncStorageService();
 const authorizationService = new OauthService();
 const softapService = new SoftapService();
@@ -37,6 +40,10 @@ const photonParticleService = new PhotonParticleService();
  * Suscribe to the store to avoid passing the token to all requests
  */
 store.subscribe(() => {
+
+	if (store.getState().authorization.authorized === false) {
+		httpService.setToken(null);
+	}
 
 	// Auth token
 	let token = (store.getState().authorization.authorization !== null)? store.getState().authorization.authorization.full_token : null;
@@ -108,6 +115,14 @@ Navigation.registerComponent("containers-app.ContainersConfigureDeviceScreen", (
 		<ContainersConfigureDeviceScreen
 			{...props}
 			softapService={softapService}
+		/>
+	</Provider>
+), () => ContainersConfigureDeviceScreen);
+Navigation.registerComponent("containers-app.ContainersStatsScreen", () => (props) => (
+	<Provider store={store}>
+		<ContainersStatsScreeen
+			{...props}
+			statService={statService}
 		/>
 	</Provider>
 ), () => ContainersConfigureDeviceScreen);

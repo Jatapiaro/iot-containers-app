@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Text } from 'react-native-elements'
+import { Text } from 'react-native-elements';
 
 // Custom component
 import DefaultScrollView from '../../components/DefaultScrollView';
@@ -19,10 +19,9 @@ class ShowScreen extends React.Component {
         super(props);
     }
 
-    showConfigureDeviceModal = () => {
-        this.getClaimCode();
-    }
-
+    /**
+     * Obtains a claim code for the current customer
+     */
     getClaimCode() {
         this.props.photonParticleService.claimCode()
             .then(res => {
@@ -33,7 +32,13 @@ class ShowScreen extends React.Component {
                 console.log(err);
             });
     }
+    
 
+    /**
+     * Open a modal to configure the photon particle device
+     * 
+     * @param {*} claimCode 
+     */
     openModal(claimCode) {
         Icon.getImageSource('ios-close-circle', 30, colorPalette.danger)
         .then((res) => {
@@ -68,6 +73,39 @@ class ShowScreen extends React.Component {
         });
     }
 
+    /**
+     * Push the stats screen
+     */
+    pushStatsScreen = () => {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'containers-app.ContainersStatsScreen',
+                passProps: {
+                    container: this.props.container
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: `Estadísticas`,
+                            color: colorPalette.white
+                        },
+                        background: {
+                            color: colorPalette.darkBlue
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Helper to get a claim code and then
+     * call the method to open the modal
+     */
+    showConfigureDeviceModal = () => {
+        this.getClaimCode();
+    }
+
     render() {
         return (
             <DefaultScrollView style={styles.container}>
@@ -88,9 +126,15 @@ class ShowScreen extends React.Component {
                 </Text>
                 <DefaultButton 
                     loading={false}
-                    title={"Hacer medición"}
+                    title={"Realizar medición"}
                     icon="ios-code-working"
                     onPress={() => {alert("TODO: Implementar hacer medición")}}
+                />
+                <DefaultButton 
+                    loading={false}
+                    title={"Ver Estadísticas"}
+                    icon="ios-code-working"
+                    onPress={this.pushStatsScreen}
                 />
                 <DefaultButton 
                     loading={false}
