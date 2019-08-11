@@ -1,7 +1,9 @@
 import React from 'react';
-import { Picker, ScrollView, StyleSheet } from 'react-native';
+import { Dimensions, Picker, ScrollView, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BarChart } from 'react-native-chart-kit';
+import { Table, Row, Rows } from 'react-native-table-component';
+
 
 // Custom Components
 import colorPalette from './../../components/ColorPalette';
@@ -9,6 +11,7 @@ import colorPalette from './../../components/ColorPalette';
 // Models
 import DayStat from './../../models/DayStat';
 
+const screenWidth = Dimensions.get('window').width;
 const chartConfig = {
     backgroundGradientFrom: colorPalette.darkBlue,
     backgroundGradientTo: colorPalette.darkBlue,
@@ -16,11 +19,26 @@ const chartConfig = {
     strokeWidth: 3
 }
 
+
 class StatsScreen extends React.Component {
 
     state = {
         dayStat: new DayStat(),
-        range: 'day'
+        range: 'day',
+        chartData: {
+            data: {
+                labels: [],
+                datasets: [{
+                    data: []
+                }]
+            },
+            height: 300,
+            table: {
+                head: [],
+                data: []
+            },
+            width: 2500,
+        }
     }
 
     componentWillMount() {
@@ -40,12 +58,14 @@ class StatsScreen extends React.Component {
 
             /**
              * Update the entire state
+             * Also we assign the day stat as the default stat
              */
             this.setState({
                 dayStat: dayStat,
                 // TODO add week stat,
                 // TODO add month stat,
                 // TODO add year stat
+                chartData: dayStat.getChartDataObject()
             });
 
         })
@@ -54,6 +74,38 @@ class StatsScreen extends React.Component {
         });
     }
 
+    /**
+     * Shows the chart for the specified range
+     */
+    reloadChart = (range) => {
+        switch(range) {
+            case 'day':
+                this.setState({
+                    range: range,
+                    chartData: this.state.dayStat.getChartDataObject()
+                });
+                break;
+            case 'week':
+                this.setState({
+                    range: range,
+                    //TODO: add the week data
+                });
+                break;
+            case 'month':
+                this.setState({
+                    range: range,
+                    //TODO: add the monthStat data
+                });
+                break;
+            case 'year':
+                this.setState({
+                    range: range,
+                    //TODO: add the yearStat data
+                });
+                break;
+        }
+    }
+    
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -65,7 +117,7 @@ class StatsScreen extends React.Component {
                     style={styles.picker}
                     itemStyle={styles.pickerItem}
                     onValueChange={(itemValue) =>
-                        this.setState({range: itemValue})
+                        this.reloadChart(itemValue)
                     }>
                     <Picker.Item label="Por Día" value="day" />
                     <Picker.Item label="Por Semana" value="week" />
@@ -74,14 +126,18 @@ class StatsScreen extends React.Component {
                 </Picker>
                 <ScrollView style={styles.horizontalContainer} horizontal={true}>
                     <BarChart
-                        data={this.state.dayStat.getChartData()}
-                        width={2500}
-                        height={350}
-                        yAxisLabel={'Vol: '}
-                        style={styles.graphStyle}
                         chartConfig={chartConfig}
+                        data={this.state.chartData.data}
+                        height={this.state.chartData.height}
+                        style={styles.graphStyle}
+                        width={this.state.chartData.width}
+                        yAxisLabel={'Vol: '}
                     />
                 </ScrollView>
+                <Table style={{marginBottom: 50}} borderStyle={styles.tableBorder}>
+                    <Row data={this.state.chartData.table.head} style={styles.tableHead} textStyle={[styles.tableText, styles.tableBoldText]}/>
+                    <Rows data={this.state.chartData.table.data} textStyle={styles.tableText}/>
+                </Table>
             </ScrollView>
         );
     }
@@ -113,8 +169,24 @@ const styles = StyleSheet.create({
         height: 60,
         width: '100%'
     },
+    tableBorder: {
+        borderWidth: 2, 
+        borderColor: '#C1C0B9'
+    },
+    tableHead: { 
+        height: 40, 
+        backgroundColor: colorPalette.orange 
+    },
+    tableText: { 
+        margin: 6,
+        color: colorPalette.white,
+        textAlign: 'center'
+    },
+    tableBoldText: {
+        fontWeight: "800"
+    },
     text: {
-        color: colorPalette.white
+        color: colorPalette.white,
     },
     textCentered: {
         textAlign: 'center'
