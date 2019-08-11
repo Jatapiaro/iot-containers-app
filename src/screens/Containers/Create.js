@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native-elements'
-import { KeyboardAvoidingView, StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 // Custom component
 import DefaultScrollView from '../../components/DefaultScrollView';
@@ -17,22 +16,18 @@ import { Navigation } from 'react-native-navigation';
 // Redux
 import  { connect } from 'react-redux';
 import { setContainer } from './../../store/actions/Index';
+import ContainerForm from '../../components/ContainerForm';
 
 class CreateScreen extends React.Component {
 
     constructor(props){
         super(props);
-        this.inputRefs={
-            name: React.createRef(),
-            height: React.createRef(),
-            radius: React.createRef(),
-        };
     }
     state = {
         container: new Container(),
         errors: {
-
-        }
+        },
+        loading: false
     }
 
     getError = (name) => {
@@ -50,22 +45,25 @@ class CreateScreen extends React.Component {
     handleValueChange = (name, value) => {
         let container = this.state.container;
         container[name] = value;
-        this.setState({container: container});
+        this.setState({ container: container });
     }
 
     /**
      * Sends the container data to the backend
      */
     storeContainer = () => {
+        this.setState({loading: true});
         this.props.containerService.store(this.state.container)
             .then(res => {
                 this.props.setContainer(res);
+                this.setState({loading: true});
                 Navigation.pop(this.props.componentId);
             })
             .catch(err => {
                 console.log(err.errors);
                 this.setState({
-                    errors: err.errors
+                    errors: err.errors,
+                    loading: false
                 });
             });
     }
@@ -76,68 +74,15 @@ class CreateScreen extends React.Component {
     render() {
         return (
             <DefaultScrollView style={styles.container}>
-                <KeyboardAvoidingView
-                    behavior="position"
-                    keyboardVerticalOffset={Platform.OS === 'ios'? -100 : -200}
-                    contentContainerStyle={styles.formContainer}>
+            
+                <ContainerForm
+                    action={this.storeContainer}
+                    container={this.state.container}
+                    getError={this.getError}
+                    handleValueChange={this.handleValueChange}
+                    loading={this.state.loading}
+                />
 
-                    <Text h3={true} style={styles.text}>
-                        Datos del Contenedor
-                    </Text>
-
-                    <FormInput
-                        refInput={this.inputRefs.name}
-                        icon="ios-cube"
-                        value={this.state.container.name}
-                        onChangeText={(name) => {this.handleValueChange("name", name)}}
-                        placeholder="Nombre (Casa / Oficina)"
-                        returnKeyType="next"
-                        errorMessage={
-                            this.getError("container.name")
-                        }
-                        onSubmitEditing={() => {
-                            this.inputRefs.height.current.input.focus()
-                        }}
-                    />
-
-                    <FormInput
-                        refInput={this.inputRefs.height}
-                        icon="ios-resize"
-                        value={this.state.container.height}
-                        onChangeText={(height) => {this.handleValueChange("height", height)}}
-                        placeholder="Altura del contenedor en metros"
-                        returnKeyType="next"
-                        errorMessage={
-                            this.getError("container.height")
-                        }
-                        onSubmitEditing={() => {
-                            this.inputRefs.radius.current.input.focus()
-                        }}
-                    />
-
-                    <FormInput
-                        refInput={this.inputRefs.radius}
-                        icon="logo-chrome"
-                        value={this.state.container.radius}
-                        onChangeText={(radius) => {this.handleValueChange("radius", radius)}}
-                        placeholder="Radio del contenedor en metros"
-                        returnKeyType="next"
-                        errorMessage={
-                            this.getError("container.radius")
-                        }
-                        onSubmitEditing={() => {
-                            this.storeContainer();
-                        }}
-                    />
-
-                    <DefaultButton 
-                        loading={false}
-                        title={"Crear Contenedor"}
-                        icon="ios-add-circle"
-                        onPress={this.storeContainer}
-                    />
-
-                </KeyboardAvoidingView>
             </DefaultScrollView>
         );
     }
@@ -154,14 +99,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderTopColor: colorPalette.orange,
         borderBottomColor: colorPalette.orange
-    },
-    formContainer: {
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-    text: {
-        color: "#fff"
     }
 });
 
