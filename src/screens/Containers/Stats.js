@@ -1,5 +1,5 @@
 import React from 'react';
-import { Picker, ScrollView, StyleSheet } from 'react-native';
+import { Dimensions, Picker, ScrollView, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BarChart } from 'react-native-chart-kit';
 
@@ -9,6 +9,7 @@ import colorPalette from './../../components/ColorPalette';
 // Models
 import DayStat from './../../models/DayStat';
 
+const screenWidth = Dimensions.get('window').width;
 const chartConfig = {
     backgroundGradientFrom: colorPalette.darkBlue,
     backgroundGradientTo: colorPalette.darkBlue,
@@ -20,7 +21,17 @@ class StatsScreen extends React.Component {
 
     state = {
         dayStat: new DayStat(),
-        range: 'day'
+        range: 'day',
+        chartData: {
+            data: {
+                labels: [],
+                datasets: [{
+                    data: []
+                }]
+            },
+            width: 2500,
+            height: 300
+        }
     }
 
     componentWillMount() {
@@ -40,12 +51,14 @@ class StatsScreen extends React.Component {
 
             /**
              * Update the entire state
+             * Also we assign the day stat as the default stat
              */
             this.setState({
                 dayStat: dayStat,
                 // TODO add week stat,
                 // TODO add month stat,
                 // TODO add year stat
+                chartData: dayStat.getChartDataObject
             });
 
         })
@@ -54,6 +67,38 @@ class StatsScreen extends React.Component {
         });
     }
 
+    /**
+     * Shows the chart for the specified range
+     */
+    reloadChart = (range) => {
+        switch(range) {
+            case 'day':
+                this.setState({
+                    range: range,
+                    chartData: this.state.dayStat.getChartDataObject()
+                });
+                break;
+            case 'week':
+                this.setState({
+                    range: range,
+                    //TODO: add the week data
+                });
+                break;
+            case 'month':
+                this.setState({
+                    range: range,
+                    //TODO: add the monthStat data
+                });
+                break;
+            case 'year':
+                this.setState({
+                    range: range,
+                    //TODO: add the yearStat data
+                });
+                break;
+        }
+    }
+    
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -65,7 +110,7 @@ class StatsScreen extends React.Component {
                     style={styles.picker}
                     itemStyle={styles.pickerItem}
                     onValueChange={(itemValue) =>
-                        this.setState({range: itemValue})
+                        this.reloadChart(itemValue)
                     }>
                     <Picker.Item label="Por Día" value="day" />
                     <Picker.Item label="Por Semana" value="week" />
@@ -74,12 +119,12 @@ class StatsScreen extends React.Component {
                 </Picker>
                 <ScrollView style={styles.horizontalContainer} horizontal={true}>
                     <BarChart
-                        data={this.state.dayStat.getChartData()}
-                        width={2500}
-                        height={350}
-                        yAxisLabel={'Vol: '}
-                        style={styles.graphStyle}
                         chartConfig={chartConfig}
+                        data={this.state.chartData.data}
+                        height={this.state.chartData.height}
+                        style={styles.graphStyle}
+                        width={this.state.chartData.width}
+                        yAxisLabel={'Vol: '}
                     />
                 </ScrollView>
             </ScrollView>
