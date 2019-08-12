@@ -11,6 +11,7 @@ import colorPalette from './../../components/ColorPalette';
 // Models
 import DayStat from './../../models/DayStat';
 import WeekStat from './../../models/WeekStat';
+import MonthStat from './../../models/MonthStat';
 
 const screenWidth = Dimensions.get('window').width;
 const chartConfig = {
@@ -26,6 +27,7 @@ class StatsScreen extends React.Component {
     state = {
         dayStat: new DayStat(),
         weekStat: new WeekStat(),
+        monthStat: new MonthStat(),
         range: 'day',
         chartData: {
             data: {
@@ -52,14 +54,17 @@ class StatsScreen extends React.Component {
          */
         Promise.all([
             this.props.statService.getStat(this.props.container),
-            this.props.statService.getStat(this.props.container,'week')
+            this.props.statService.getStat(this.props.container,'week'),
+            this.props.statService.getStat(this.props.container,'month')
         ])
         .then((res) => {
 
             let dayStat = this.state.dayStat;
             let weekStat = this.state.weekStat;
+            let monthStat = this.state.monthStat;
             dayStat.fillWithResponseData(res[0]);
             weekStat.fillWithResponseData(res[1]);
+            monthStat.fillWithResponseData(res[2]);
 
             /**
              * Update the entire state
@@ -68,7 +73,7 @@ class StatsScreen extends React.Component {
             this.setState({
                 dayStat: dayStat,
                 weekStat: weekStat,
-                // TODO add month stat,
+                monthStat: monthStat,
                 // TODO add year stat
                 chartData: dayStat.getChartDataObject(),
             });
@@ -99,7 +104,7 @@ class StatsScreen extends React.Component {
             case 'month':
                 this.setState({
                     range: range,
-                    //TODO: add the monthStat data
+                    chartData: this.state.monthStat.getChartDataObject()
                 });
                 break;
             case 'year':
