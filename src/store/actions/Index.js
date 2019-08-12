@@ -6,5 +6,6 @@ export {
 
 export {
     setContainers,
-    setContainer
+    setContainer,
+    updateContainer
 } from './Containers';

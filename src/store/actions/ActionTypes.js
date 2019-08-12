@@ -14,3 +14,4 @@ export const SET_PROFILE = "SET_PROFILE";
  */
 export const SET_CONTAINERS = "SET_CONTAINERS";
 export const SET_CONTAINER = "SET_CONTAINER";
+export const UPDATE_CONTAINER = "UPDATE_CONTAINER";

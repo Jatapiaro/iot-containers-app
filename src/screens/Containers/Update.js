@@ -13,16 +13,24 @@ import { Navigation } from 'react-native-navigation';
 
 // Redux
 import  { connect } from 'react-redux';
-import { setContainer } from './../../store/actions/Index';
+import { updateContainer } from './../../store/actions/Index';
 import ContainerForm from '../../components/ContainerForm';
 
-class CreateScreen extends React.Component {
+class UpdateScreen extends React.Component {
 
     state = {
         container: new Container(),
         errors: {
         },
         loading: false
+    }
+
+    componentWillMount() {
+        let container = this.state.container;
+        container.fillWithResponseData(this.props.container);
+        this.setState({
+            container: container
+        });
     }
 
     /**
@@ -45,42 +53,39 @@ class CreateScreen extends React.Component {
         container[name] = value;
         this.setState({ container: container });
     }
-
+    
     /**
-     * Sends the container data to the backend
+     * Sends the new container data to the server
      */
-    storeContainer = () => {
-        this.setState({loading: true});
-        this.props.containerService.store(this.state.container)
-            .then(res => {
-                this.props.setContainer(res);
+    updateContainer = () => {
+        this.props.containerService.update(this.state.container)
+            .then((res) => {
                 this.setState({loading: true});
-                Navigation.pop(this.props.componentId);
+                this.props.updateContainer(res);
+                this.props.onPassProp(res);
+                Navigation.pop(this.props.componentId, {props: {container: res}});
             })
-            .catch(err => {
-                console.log(err.errors);
+            .catch((err) => {
+                console.log(err);
                 this.setState({
-                    errors: err.errors,
-                    loading: false
+                    loading: false,
+                    errors: err.errors
                 });
             });
     }
 
-    /**
-     * Renders the screen
-     */
     render() {
         return (
             <DefaultScrollView style={styles.container}>
-            
                 <ContainerForm
-                    action={this.storeContainer}
+                    action={this.updateContainer}
                     container={this.state.container}
                     getError={this.getError}
                     handleValueChange={this.handleValueChange}
                     loading={this.state.loading}
+                    buttonTitle='Actualizar Contendor'
+                    buttonIcon='ios-create'
                 />
-
             </DefaultScrollView>
         );
     }
@@ -102,7 +107,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        setContainer: (container) => dispatch(setContainer(container))
+        updateContainer: (container) => dispatch(updateContainer(container))
     };
 };
-export default connect(null, mapDispatchToProps)(CreateScreen);
+export default connect(null, mapDispatchToProps)(UpdateScreen);
