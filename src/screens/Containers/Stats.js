@@ -142,6 +142,7 @@ class StatsScreen extends React.Component {
                         style={{width: this.state.chartData.width}}
                         width={this.state.chartData.width}
                         yAxisLabel={'Vol: '}
+                        fromZero={true}
                     />
                 </ScrollView>
                 <Table style={{marginBottom: 50}} borderStyle={styles.tableBorder}>
