@@ -70,7 +70,7 @@ class StatsScreen extends React.Component {
                 weekStat: weekStat,
                 // TODO add month stat,
                 // TODO add year stat
-                chartData: dayStat.getChartDataObject(),         
+                chartData: dayStat.getChartDataObject(),
             });
 
         })

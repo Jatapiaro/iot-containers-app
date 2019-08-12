@@ -11,25 +11,44 @@ import colorPalette from './ColorPalette';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-const DefaultScrollView = props => {
-    return (
-        <ScrollView
+class DefaultScrollView extends React.Component {
+
+    state = {
+        layout: {
+            height: SCREEN_HEIGHT,
+            width: SCREEN_WIDTH
+        }
+    };
+
+    onLayout = event => {
+        this.setState({
+            layout: {
+                height: Dimensions.get('window').height,
+                width: Dimensions.get('window').width
+            }
+        });
+    };    
+
+    render() {
+        return (
+            <ScrollView
             scrollEnabled={false}
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={[styles.container, props.style]}>
+            onLayout={this.onLayout}
+            contentContainerStyle={[this.state.layout, styles.container, this.props.style]}>
 
-            {props.children}
+                {this.props.children}
 
-        </ScrollView>
-    );
-};
+            </ScrollView>
+        );
+    }
+
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colorPalette.darkBlue,
-        width: SCREEN_WIDTH,
-        height: SCREEN_HEIGHT,
     },
 });
 
