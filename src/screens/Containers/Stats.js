@@ -10,6 +10,7 @@ import colorPalette from './../../components/ColorPalette';
 
 // Models
 import DayStat from './../../models/DayStat';
+import WeekStat from './../../models/WeekStat';
 
 const screenWidth = Dimensions.get('window').width;
 const chartConfig = {
@@ -24,6 +25,7 @@ class StatsScreen extends React.Component {
 
     state = {
         dayStat: new DayStat(),
+        weekStat: new WeekStat(),
         range: 'day',
         chartData: {
             data: {
@@ -49,12 +51,15 @@ class StatsScreen extends React.Component {
          * is the same as the order of the promises we sent
          */
         Promise.all([
-            this.props.statService.getStat(this.props.container)
+            this.props.statService.getStat(this.props.container),
+            this.props.statService.getStat(this.props.container,'week')
         ])
         .then((res) => {
 
             let dayStat = this.state.dayStat;
+            let weekStat = this.state.weekStat;
             dayStat.fillWithResponseData(res[0]);
+            weekStat.fillWithResponseData(res[1]);
 
             /**
              * Update the entire state
@@ -62,10 +67,10 @@ class StatsScreen extends React.Component {
              */
             this.setState({
                 dayStat: dayStat,
-                // TODO add week stat,
+                weekStat: weekStat,
                 // TODO add month stat,
                 // TODO add year stat
-                chartData: dayStat.getChartDataObject()
+                chartData: dayStat.getChartDataObject(),         
             });
 
         })
@@ -88,7 +93,7 @@ class StatsScreen extends React.Component {
             case 'week':
                 this.setState({
                     range: range,
-                    //TODO: add the week data
+                    chartData: this.state.weekStat.getChartDataObject()
                 });
                 break;
             case 'month':
