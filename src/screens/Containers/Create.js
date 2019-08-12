@@ -58,7 +58,6 @@ class CreateScreen extends React.Component {
                 Navigation.pop(this.props.componentId);
             })
             .catch(err => {
-                console.log(err.errors);
                 this.setState({
                     errors: err.errors,
                     loading: false
