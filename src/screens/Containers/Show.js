@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 
 // Custom component
@@ -164,15 +164,21 @@ class ShowScreen extends React.Component {
                 </Text>
                 <DefaultButton 
                     loading={false}
-                    title={"Realizar medición"}
+                    title={"Realizar Medición"}
                     icon="ios-code-working"
                     onPress={() => {alert("TODO: Implementar hacer medición")}}
                 />
                 <DefaultButton
                     loading={false}
                     title={"Ver Estadísticas"}
-                    icon="ios-code-working"
+                    icon="ios-stats"
                     onPress={this.pushStatsScreen}
+                />
+                <DefaultButton 
+                    loading={false}
+                    title={"Lista de Mediciones"}
+                    icon="ios-list"
+                    onPress={() => {alert("TODO: Implementar vista de listado de mediciones")}}
                 />
                 <DefaultButton
                     loading={false}
@@ -180,7 +186,7 @@ class ShowScreen extends React.Component {
                     icon="ios-create"
                     onPress={this.pushUpdateScreen}
                 />
-                <DefaultButton 
+                <DefaultButton
                     loading={false}
                     title={"Configurar dispositivo"}
                     icon="ios-cog"

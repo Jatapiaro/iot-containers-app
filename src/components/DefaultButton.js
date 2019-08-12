@@ -9,7 +9,7 @@ const DefaultButton = props => {
     return (
         <Button 
             buttonStyle={[styles.button, props.style]}
-            titleStyle={styles.buttonText}
+            titleStyle={[styles.buttonText, props.buttonTextStyle]}
             loading={props.loading}
             title={props.title}
             icon={<Icon name={props.icon} type={"ionicon"} color="#7384B4" size={25} iconStyle={styles.icon}/>}

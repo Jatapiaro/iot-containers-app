@@ -12,7 +12,7 @@ export default class DayStat {
      */
     initData() {
         for (let i = 0; i <= 23; i++) {
-            let label = (i < 10)? `${i}0:00` : `${i}:00`;
+            let label = (i < 10)? `0${i}:00` : `${i}:00`;
             this.labels.push(label);
             this.data.push(0);
         }
