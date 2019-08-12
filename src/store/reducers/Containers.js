@@ -1,5 +1,5 @@
 import {
-    SET_CONTAINERS, SET_CONTAINER, UPDATE_CONTAINER
+    SET_CONTAINERS, SET_CONTAINER, UPDATE_CONTAINER, DELETE_CONTAINER
 } from './../actions/ActionTypes';
 
 const initialState = {
@@ -31,6 +31,21 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 containers: [].concat(containers) 
+            }
+        case DELETE_CONTAINER:
+            let conts = state.containers;
+            let index = -1;
+            for (let i = 0; i < conts.length; i++) {
+                let container = conts[i];
+                if (container.id === action.container.id) {
+                    index = i;
+                    break;
+                }
+            }
+            conts.splice(index, 1);
+            return {
+                ...state,
+                containers: conts
             }
         default:
             return state;

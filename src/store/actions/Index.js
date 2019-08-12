@@ -7,5 +7,6 @@ export {
 export {
     setContainers,
     setContainer,
-    updateContainer
+    updateContainer,
+    deleteContainer
 } from './Containers';

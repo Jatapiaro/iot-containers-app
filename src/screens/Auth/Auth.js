@@ -43,7 +43,6 @@ class AuthScreen extends Component {
             password: React.createRef(),
             password_confirmation: React.createRef(),
         }
-        console.log(this.inputRefs);
     }
 
     componentWillMount() {

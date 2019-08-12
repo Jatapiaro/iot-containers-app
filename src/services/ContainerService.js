@@ -28,8 +28,19 @@ export default class ContainerService {
 
     update(container) {
         const route = `${this.route}/${container.id}`;
-        const data = this.getData(container);
         return this.httpService.makePut(route, data)
+            .then((res) => {
+                return Promise.resolve(res);
+            })
+            .catch((err) => {
+                return Promise.reject(err);
+            });
+    }
+
+    delete(container) {
+        const route = `${this.route}/${container.id}`;
+        console.log(route);
+        return this.httpService.makeDelete(route)
             .then((res) => {
                 return Promise.resolve(res);
             })

@@ -42,7 +42,7 @@ export default class HttpService {
     makeDelete(route, body = {}) {
         const endpoint = this.getEndpoint(route);
         const headers = this.getHeaders(false);
-        return axios.delete(endpoint, body, { headers: headers }).then(res => {
+        return axios.delete(endpoint, { headers: headers }).then(res => {
             return Promise.resolve(res.data.data);
         })
         .catch(err => {

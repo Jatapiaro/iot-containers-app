@@ -1,7 +1,8 @@
 import {
     SET_CONTAINERS,
     SET_CONTAINER,
-    UPDATE_CONTAINER
+    UPDATE_CONTAINER,
+    DELETE_CONTAINER
 } from './ActionTypes';
 
 export const setContainers = (containers) => {
@@ -21,6 +22,13 @@ export const setContainer = (container) => {
 export const updateContainer = (container) => {
     return {
         type: UPDATE_CONTAINER,
+        container: container
+    }
+}
+
+export const deleteContainer = (container) => {
+    return {
+        type: DELETE_CONTAINER,
         container: container
     }
 }
