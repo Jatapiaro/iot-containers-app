@@ -1,10 +1,10 @@
-export default class WeekStat {
+export default class MonthStat {
 
     constructor() {
         this.labels = ['DOM','LUN','MAR','MIE','JUE','VIE','SAB'];
         this.data = [0,0,0,0,0,0,0];
     }
-    
+
     /**
      * Converts the stat model to an object to be passed
      * to the chart library
