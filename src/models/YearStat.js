@@ -14,7 +14,7 @@ export default class YearStat {
             data: this.getChartData(),
             height: 300,
             table: this.getTableData(),
-            width: 500
+            width: 1000
         }
     }
 
