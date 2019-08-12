@@ -82,14 +82,14 @@ export default class ContainerForm extends React.Component {
                         this.props.getError("container.device_id")
                     }
                     onSubmitEditing={() => {
-                        this.prxops.action();
+                        this.props.action();
                     }}
                 />
 
                 <DefaultButton 
                     loading={this.props.loading}
-                    title={this.props.title}
-                    icon={this.props.icon}
+                    title={this.props.buttonTitle}
+                    icon={this.props.buttonIcon}
                     onPress={this.props.action}
                 />
 
@@ -111,6 +111,6 @@ const styles = StyleSheet.create({
 });
 
 ContainerForm.defaultProps = {
-    title: 'Crear Contenedor',
-    icon: 'ios-add-circle'
+    buttonTitle: 'Crear Contenedor',
+    buttonIcon: 'ios-add-circle'
 }

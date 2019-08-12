@@ -8,7 +8,8 @@ import ContainersIndexScreen from './src/screens/Containers/Index';
 import ContainersCreateScreen from './src/screens/Containers/Create';
 import ContainersShowScreen from './src/screens/Containers/Show';
 import ContainersConfigureDeviceScreen from './src/screens/Containers/ConfigureDevice';
-import ContainersStatsScreeen from './src/screens/Containers/Stats';
+import ContainersStatsScreen from './src/screens/Containers/Stats';
+import ContainersUpdateScreen from './src/screens/Containers/Update';
 
 // Services
 import HttpService from './src/services/HttpService';
@@ -120,13 +121,20 @@ Navigation.registerComponent("containers-app.ContainersConfigureDeviceScreen", (
 ), () => ContainersConfigureDeviceScreen);
 Navigation.registerComponent("containers-app.ContainersStatsScreen", () => (props) => (
 	<Provider store={store}>
-		<ContainersStatsScreeen
+		<ContainersStatsScreen
 			{...props}
 			statService={statService}
 		/>
 	</Provider>
 ), () => ContainersConfigureDeviceScreen);
-
+Navigation.registerComponent("containers-app.ContainersUpdateScreen", () => (props) => (
+	<Provider store={store}>
+		<ContainersUpdateScreen
+			{...props}
+			containerService={containerService}
+		/>
+	</Provider>
+), () => ContainersUpdateScreen);
 
 
 // Start the app

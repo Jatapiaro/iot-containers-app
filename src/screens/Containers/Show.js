@@ -6,6 +6,7 @@ import { Text } from 'react-native-elements';
 import DefaultScrollView from '../../components/DefaultScrollView';
 import colorPalette from './../../components/ColorPalette';
 import DefaultButton from '../../components/DefaultButton';
+import Container from '../../models/Container';
 
 // RNNV icons
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,8 +16,19 @@ import { Navigation } from 'react-native-navigation';
 
 class ShowScreen extends React.Component {
 
+    state = {
+        container: new Container()
+    }
+
+
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount() {
+        this.setState({
+            container: this.props.container
+        });
     }
 
     /**
@@ -74,6 +86,32 @@ class ShowScreen extends React.Component {
     }
 
     /**
+     * Push the edit screen
+     */
+    pushUpdateScreen = () => {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'containers-app.ContainersUpdateScreen',
+                passProps: {
+                    container: this.state.container,
+                    onPassProp: (data) => this.setState({container: data}) 
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: `Actualizar Contenedor`,
+                            color: colorPalette.white
+                        },
+                        background: {
+                            color: colorPalette.darkBlue
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Push the stats screen
      */
     pushStatsScreen = () => {
@@ -110,19 +148,19 @@ class ShowScreen extends React.Component {
         return (
             <DefaultScrollView style={styles.container}>
                 <Text h4={true} style={[styles.text, styles.textCentered]}>
-                    {this.props.container.name}
+                    {this.state.container.name}
                 </Text>
                 <Text h5={true} style={styles.text}>
-                    Altura: {this.props.container.height}
+                    Altura: {this.state.container.height}
                 </Text>
                 <Text h5={true} style={styles.text}>
-                    Radio: {this.props.container.radius}
+                    Radio: {this.state.container.radius}
                 </Text>
                 <Text h5={true} style={styles.text}>
-                    Volumen: {this.props.container.volume}
+                    Volumen: {this.state.container.volume}
                 </Text>
                 <Text h5={true} style={styles.text}>
-                    Contenido actual: {this.props.container.volume}
+                    Contenido Actual: {this.state.container.volume}
                 </Text>
                 <DefaultButton 
                     loading={false}
@@ -130,11 +168,17 @@ class ShowScreen extends React.Component {
                     icon="ios-code-working"
                     onPress={() => {alert("TODO: Implementar hacer medición")}}
                 />
-                <DefaultButton 
+                <DefaultButton
                     loading={false}
                     title={"Ver Estadísticas"}
                     icon="ios-code-working"
                     onPress={this.pushStatsScreen}
+                />
+                <DefaultButton
+                    loading={false}
+                    title={"Editar Contenedor"}
+                    icon="ios-create"
+                    onPress={this.pushUpdateScreen}
                 />
                 <DefaultButton 
                     loading={false}
