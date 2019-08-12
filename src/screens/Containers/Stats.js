@@ -12,6 +12,7 @@ import colorPalette from './../../components/ColorPalette';
 import DayStat from './../../models/DayStat';
 import WeekStat from './../../models/WeekStat';
 import MonthStat from './../../models/MonthStat';
+import YearStat from './../../models/YearStat';
 
 const screenWidth = Dimensions.get('window').width;
 const chartConfig = {
@@ -28,6 +29,7 @@ class StatsScreen extends React.Component {
         dayStat: new DayStat(),
         weekStat: new WeekStat(),
         monthStat: new MonthStat(),
+        yearStat: new YearStat(),
         range: 'day',
         chartData: {
             data: {
@@ -55,16 +57,19 @@ class StatsScreen extends React.Component {
         Promise.all([
             this.props.statService.getStat(this.props.container),
             this.props.statService.getStat(this.props.container,'week'),
-            this.props.statService.getStat(this.props.container,'month')
+            this.props.statService.getStat(this.props.container,'month'),
+            this.props.statService.getStat(this.props.container,'year')
         ])
         .then((res) => {
 
             let dayStat = this.state.dayStat;
             let weekStat = this.state.weekStat;
             let monthStat = this.state.monthStat;
+            let yearStat= this.state.yearStat;
             dayStat.fillWithResponseData(res[0]);
             weekStat.fillWithResponseData(res[1]);
             monthStat.fillWithResponseData(res[2]);
+            yearStat.fillWithResponseData(res[3]);
 
             /**
              * Update the entire state
@@ -74,7 +79,7 @@ class StatsScreen extends React.Component {
                 dayStat: dayStat,
                 weekStat: weekStat,
                 monthStat: monthStat,
-                // TODO add year stat
+                yearStat: yearStat,
                 chartData: dayStat.getChartDataObject(),
             });
 
@@ -110,7 +115,7 @@ class StatsScreen extends React.Component {
             case 'year':
                 this.setState({
                     range: range,
-                    //TODO: add the yearStat data
+                    chartData: this.state.yearStat.getChartDataObject()
                 });
                 break;
         }
