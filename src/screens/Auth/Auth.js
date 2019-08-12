@@ -230,7 +230,7 @@ class AuthScreen extends Component {
                     !this.state.fetchingAuthorization &&
                     <KeyboardAvoidingView
                         behavior="position"
-                        keyboardVerticalOffset={Platform.OS === 'ios' ? -100 : -200}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? -100 : (this.state.registration)? -175 : -100}
                         contentContainerStyle={styles.formContainer}
                     >
 

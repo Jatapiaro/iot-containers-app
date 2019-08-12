@@ -20,7 +20,7 @@ export default class ContainerForm extends React.Component {
         return (
             <KeyboardAvoidingView
             behavior="position"
-            keyboardVerticalOffset={Platform.OS === 'ios'? 30 : -200}
+            keyboardVerticalOffset={Platform.OS === 'ios'? 30 : -150}
             contentContainerStyle={styles.formContainer}>
 
                 <Text h3={true} style={styles.text}>
