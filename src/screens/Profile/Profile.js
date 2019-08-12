@@ -43,6 +43,7 @@ class ProfileScreen extends React.Component {
                         },
                         bottomTabs: {
                             visible: false,
+                            drawBehind: true, // for android
                             height: 0,
                         }
                     }
