@@ -134,7 +134,7 @@ class StatsScreen extends React.Component {
                         chartConfig={chartConfig}
                         data={this.state.chartData.data}
                         height={this.state.chartData.height}
-                        style={styles.graphStyle}
+                        style={{width: this.state.chartData.width}}
                         width={this.state.chartData.width}
                         yAxisLabel={'Vol: '}
                     />

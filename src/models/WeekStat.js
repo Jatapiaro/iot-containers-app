@@ -3,7 +3,6 @@ export default class WeekStat {
     constructor() {
         this.labels = ['DOM','LUN','MAR','MIE','JUE','VIE','SAB'];
         this.data = [0,0,0,0,0,0,0];
-        //this.initData();
     }
 
     /**
