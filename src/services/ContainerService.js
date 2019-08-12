@@ -28,6 +28,7 @@ export default class ContainerService {
 
     update(container) {
         const route = `${this.route}/${container.id}`;
+        const data = this.getData(container);
         return this.httpService.makePut(route, data)
             .then((res) => {
                 return Promise.resolve(res);
