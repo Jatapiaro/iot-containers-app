@@ -136,6 +136,32 @@ class ShowScreen extends React.Component {
         });
     }
 
+
+     /**
+     * Push the meassures screen
+     */
+    pushMeasuresScreen = () => {
+        Navigation.push(this.props.componentId, {
+            component: {
+                name: 'containers-app.ContainersMeasuresScreen',
+                passProps: {
+                    container: this.props.container
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: `Mediciones`,
+                            color: colorPalette.white
+                        },
+                        background: {
+                            color: colorPalette.darkBlue
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * Helper to get a claim code and then
      * call the method to open the modal
@@ -178,7 +204,7 @@ class ShowScreen extends React.Component {
                     loading={false}
                     title={"Lista de Mediciones"}
                     icon="ios-list"
-                    onPress={() => {alert("TODO: Implementar vista de listado de mediciones")}}
+                    onPress={this.pushMeasuresScreen}
                 />
                 <DefaultButton
                     loading={false}

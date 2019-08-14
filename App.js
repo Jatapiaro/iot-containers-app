@@ -10,6 +10,7 @@ import ContainersShowScreen from './src/screens/Containers/Show';
 import ContainersConfigureDeviceScreen from './src/screens/Containers/ConfigureDevice';
 import ContainersStatsScreen from './src/screens/Containers/Stats';
 import ContainersUpdateScreen from './src/screens/Containers/Update';
+import ContainersMeasuresScreen from './src/screens/Containers/Measures';
 
 // Services
 import HttpService from './src/services/HttpService';
@@ -19,6 +20,8 @@ import OauthService from './src/services/OAuthService';
 import AsyncStorageService from './src/services/AsyncStorageService';
 import SoftapService from './src/services/SoftapService';
 import StatService from './src/services/StatService';
+import MeasureService from './src/services/MeasureService';
+
 
 // Redux
 import { Provider } from 'react-redux';
@@ -36,6 +39,7 @@ const asyncStorageService = new AsyncStorageService();
 const authorizationService = new OauthService();
 const softapService = new SoftapService();
 const photonParticleService = new PhotonParticleService();
+const measureService = new MeasureService(httpService);
 
 /**
  * Suscribe to the store to avoid passing the token to all requests
@@ -135,7 +139,15 @@ Navigation.registerComponent("containers-app.ContainersUpdateScreen", () => (pro
 		/>
 	</Provider>
 ), () => ContainersUpdateScreen);
-
+// Registra Pantalla de medidas
+Navigation.registerComponent("containers-app.ContainersMeasuresScreen", () => (props) => (
+	<Provider store={store}>
+		<ContainersMeasuresScreen
+			{...props}
+			measureService={measureService}
+		/>
+	</Provider>
+), () => ContainersConfigureDeviceScreen);
 
 // Start the app
 Navigation.events().registerAppLaunchedListener(() => {
