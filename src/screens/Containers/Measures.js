@@ -1,7 +1,6 @@
 import React from 'react';
-import { Dimensions, Picker, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
-import { BarChart } from 'react-native-chart-kit';
 import { Table, Row, Rows } from 'react-native-table-component';
 
 
@@ -9,36 +8,18 @@ import { Table, Row, Rows } from 'react-native-table-component';
 import colorPalette from './../../components/ColorPalette';
 
 // Models
-
 import Measure from './../../models/Measure';
 
-const screenWidth = Dimensions.get('window').width;
-const chartConfig = {
-    backgroundGradientFrom: colorPalette.darkBlue,
-    backgroundGradientTo: colorPalette.darkBlue,
-    color: (opacity = 1) => `rgba(252, 255, 255, ${opacity})`,
-    strokeWidth: 3
-}
+// Redux
+import  { connect } from 'react-redux';
+import { setContainerMeasures } from './../../store/actions/Index';
+
 
 
 class MeasuresScreen extends React.Component {
 
     state = {
         measure: new Measure(),
-        chartData: {
-            data: {
-                labels: [],
-                datasets: [{
-                    data: []
-                }]
-            },
-            height: 300,
-            table: {
-                head: [],
-                data: []
-            },
-            width: 2500,
-        }
     }
 
     componentWillMount() {
@@ -48,12 +29,12 @@ class MeasuresScreen extends React.Component {
          * Then we access the promises as res[0] where the index
          * is the same as the order of the promises we sent
          */
-        Promise.all([
-            this.props.measureService.getMeasures(this.props.container),
-        ])
+        this.props.measureService.index(this.props.container)
         .then((res) => {
 
-            
+            this.props.setContainerMeasures(this.props.container, res);
+            this.props.container.measures = res;
+            this.props.onPassProp(this.props.container);
             let measure = this.state.measure;
             measure.fillWithResponseData(res);
 
@@ -62,8 +43,7 @@ class MeasuresScreen extends React.Component {
              * Also we assign the measures 
              */
             this.setState({
-                measure: measure,
-                chartData: measure.getChartDataObject(),
+                measure: measure
             });
 
         })
@@ -72,7 +52,6 @@ class MeasuresScreen extends React.Component {
         });
     }
 
-   
     
     render() {
         return (
@@ -80,11 +59,9 @@ class MeasuresScreen extends React.Component {
                 <Text h4={true} style={[styles.text, styles.textCentered]}>
                     {this.props.container.name}
                 </Text>
-               
-               
-                <Table style={{marginBottom: 50}} borderStyle={styles.tableBorder}>
-                    <Row data={this.state.chartData.table.head} style={styles.tableHead} textStyle={[styles.tableText, styles.tableBoldText]}/>
-                    <Rows data={this.state.chartData.table.data} textStyle={styles.tableText}/>
+                <Table style={{marginBottom: 50, marginTop: 25}} borderStyle={styles.tableBorder}>
+                    <Row data={this.state.measure.tableObject.head} style={styles.tableHead} textStyle={[styles.tableText, styles.tableBoldText]}/>
+                    <Rows data={this.state.measure.tableObject.data} textStyle={styles.tableText}/>
                 </Table>
             </ScrollView>
         );
@@ -104,18 +81,6 @@ const styles = StyleSheet.create({
     horizontalContainer: {
         marginTop: 20,
         marginBottom: 20
-    },
-    graphStyle: {
-        width: 2500,
-    },
-    picker: {
-        color: colorPalette.white,
-        width: '100%'
-    },
-    pickerItem: {
-        color: colorPalette.white,
-        height: 60,
-        width: '100%'
     },
     tableBorder: {
         borderWidth: 2, 
@@ -141,4 +106,9 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MeasuresScreen;
+const mapDispatchToProps = dispatch => {
+    return {
+        setContainerMeasures: (container, measures) => dispatch(setContainerMeasures(container, measures))
+    };
+};
+export default connect(null, mapDispatchToProps)(MeasuresScreen);

@@ -137,7 +137,7 @@ class ShowScreen extends React.Component {
     }
 
 
-     /**
+    /**
      * Push the meassures screen
      */
     pushMeasuresScreen = () => {
@@ -145,7 +145,8 @@ class ShowScreen extends React.Component {
             component: {
                 name: 'containers-app.ContainersMeasuresScreen',
                 passProps: {
-                    container: this.props.container
+                    container: this.props.container,
+                    onPassProp: (data) => this.setState({container: data}) 
                 },
                 options: {
                     topBar: {
@@ -186,7 +187,7 @@ class ShowScreen extends React.Component {
                     Volumen: {this.state.container.volume}
                 </Text>
                 <Text h5={true} style={styles.text}>
-                    Contenido Actual: {this.state.container.volume}
+                    Contenido Actual: {this.state.container.measures.length == 0? `Aun no tenemos una medicion` : `${this.state.container.measures[0].volume.toFixed(2)} litros`}
                 </Text>
                 <DefaultButton 
                     loading={false}

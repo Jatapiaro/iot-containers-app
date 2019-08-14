@@ -8,11 +8,10 @@ export default class MeasureService {
     /**
      * Get the measures of the given container
      * 
-     * @param Container container to get the stats 
-     * @param {*} range of the query day|week|month|year 
+     * @param Container container to get the measures
      */
-    getMeasures(container, range = "measures") {
-        const route = `${this.route}/${container.id}/${range}`;
+    index(container) {
+        const route = `${this.route}/${container.id}/measures`;
         return this.httpService.makeGet(route)
             .then((res) => {
                 return Promise.resolve(res);
