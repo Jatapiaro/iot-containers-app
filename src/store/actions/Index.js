@@ -8,5 +8,6 @@ export {
     setContainers,
     setContainer,
     updateContainer,
-    deleteContainer
+    deleteContainer,
+    setContainerMeasures
 } from './Containers';
