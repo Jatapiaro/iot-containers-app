@@ -5,6 +5,7 @@
 En esta sección, se describen las capacidades desarrolladas del proyecto, así como errores conocidos y características que fueron eliminadas y sus motivos, y por último, características que son simuladas.
 En dado caso de que sea más fácil, puede acceder al siguiente link para ver el proyecto en acción:
 
+[Vídeo de Youtube](https://youtu.be/K1Z1SejJxhc)
 
 ### Features del Proyecto
 En esta sección, se mencionan cada una de las características que conforman este proyecto. 
