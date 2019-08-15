@@ -23,12 +23,6 @@ class MeasuresScreen extends React.Component {
     }
 
     componentWillMount() {
-        /**
-         * Promise.all will wait until all the promises 
-         * inside the array are complete. 
-         * Then we access the promises as res[0] where the index
-         * is the same as the order of the promises we sent
-         */
         this.props.measureService.index(this.props.container)
         .then((res) => {
 
@@ -37,7 +31,6 @@ class MeasuresScreen extends React.Component {
             this.props.onPassProp(this.props.container);
             let measure = this.state.measure;
             measure.fillWithResponseData(res);
-
             /**
              * Update the entire state
              * Also we assign the measures 

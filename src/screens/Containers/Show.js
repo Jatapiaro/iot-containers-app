@@ -123,7 +123,7 @@ class ShowScreen extends React.Component {
             component: {
                 name: 'containers-app.ContainersStatsScreen',
                 passProps: {
-                    container: this.props.container
+                    container: this.state.container
                 },
                 options: {
                     topBar: {
@@ -149,7 +149,7 @@ class ShowScreen extends React.Component {
             component: {
                 name: 'containers-app.ContainersMeasuresScreen',
                 passProps: {
-                    container: this.props.container,
+                    container: this.state.container,
                     onPassProp: (data) => this.setState({container: data}) 
                 },
                 options: {

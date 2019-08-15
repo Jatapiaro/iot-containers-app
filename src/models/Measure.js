@@ -12,6 +12,9 @@ export default class Measure {
 
     fillWithResponseData(res) {
         this.tableObject.data = [];
+        if (res.length === 0) {
+            return;
+        }
         res.map((m) => {
             this.tableObject.data.push(
                 [
