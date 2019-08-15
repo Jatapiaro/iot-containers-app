@@ -112,6 +112,7 @@ Navigation.registerComponent("containers-app.ContainersShowScreen", () => (props
 		<ContainersShowScreen
 			{...props}
 			photonParticleService={photonParticleService}
+			measureService={measureService}
 		/>
 	</Provider>
 ), () => ContainersShowScreen);

@@ -164,6 +164,20 @@ class ShowScreen extends React.Component {
     }
 
     /**
+     * Make Measure and store 
+     */
+    storeMeasure = () =>{
+        let newMeasure= Math.random()*this.state.container.height;
+        this.props.measureService.store(this.state.container,newMeasure)
+             .then(res => {
+                 console.log(res);
+        })
+        .catch(err => {
+           console.log(err.errors);
+        });
+    }
+
+    /**
      * Helper to get a claim code and then
      * call the method to open the modal
      */
@@ -193,7 +207,7 @@ class ShowScreen extends React.Component {
                     loading={false}
                     title={"Realizar Medición"}
                     icon="ios-code-working"
-                    onPress={() => {alert("TODO: Implementar hacer medición")}}
+                    onPress={this.storeMeasure}
                 />
                 <DefaultButton
                     loading={false}
