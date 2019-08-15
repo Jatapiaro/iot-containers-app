@@ -1,4 +1,3 @@
-import moment from 'moment';
 export default class Measure {
 
     constructor() {
@@ -12,17 +11,11 @@ export default class Measure {
 
     fillWithResponseData(res) {
         this.tableObject.data = [];
-        if (res.length === 0) {
-            return;
+        for (let i = 0; i < res.length; i++) {
+            let d = res[i];
+            let info = [`${d.volume.toFixed(2)} litros`,  d.created_at]
+            this.tableObject.data.push(info);
         }
-        res.map((m) => {
-            this.tableObject.data.push(
-                [
-                    `${m.volume.toFixed(2)} litros`,
-                    moment(m.created_at).lang('es').format('lll')
-                ]
-            )
-        });
     }
 
 }
