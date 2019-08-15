@@ -67,11 +67,11 @@ export default class ContainerForm extends React.Component {
                         this.props.getError("container.radius")
                     }
                     onSubmitEditing={() => {
-                        this.inputRefs.deviceId.current.input.focus()
+                        this.props.action();
                     }}
                 />
 
-                <FormInput
+                {/*<FormInput
                     refInput={this.inputRefs.deviceId}
                     icon="logo-rss"
                     value={this.props.container.device_id}
@@ -84,7 +84,7 @@ export default class ContainerForm extends React.Component {
                     onSubmitEditing={() => {
                         this.props.action();
                     }}
-                />
+                />*/}
 
                 <DefaultButton 
                     loading={this.props.loading}

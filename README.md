@@ -60,6 +60,7 @@ La  simulación en esto, es saber el volumen que hay el contenedor. A más dista
 
 #### Mediciones del usuario jacob.et.cetera@gmail.com
 Para poder probar que nuestras mediciones se están llevando a cabo correctamente (día, semana, mes y año), generamos muchas mediciones falsas o dummy para probar nuestros gráficos. Por lo tanto, para esta cuenta, si nos vamos al listado de mediciones, veremos que sus últimas mediciones son del primero de enero de 2020. Esto debido a que fueron simuladas. Sin embargo, el resto de cuentas no tendría este problema.
+Otro punto a considerar es que si se realiza una medición en ambos contenedores (Contenedor Prueba A y Contedor Prueba B), la medición se hará y se desplegará, pero al entrar al listado veremos las de 2020. Repito esto solo pasa para estos contenedores con información simulada.
 
 	  
 ## Development Installation and Instructions
