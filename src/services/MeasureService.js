@@ -27,7 +27,7 @@ export default class MeasureService {
      * @param Cointainer container to store the measure
      * @param height  measure to store  
      */
-    store(container, height){
+    store(container, height) {
         const data = this.getData(height);
         const route = `${this.route}/${container.id}/measures`;
         return this.httpService.makePost(route, data)

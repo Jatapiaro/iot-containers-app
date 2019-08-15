@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 
 // Custom component
@@ -13,6 +13,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 // Navigation
 import { Navigation } from 'react-native-navigation';
+
+// Redux
+import  { connect } from 'react-redux';
+import { updateContainer } from './../../store/actions/Index';
 
 class ShowScreen extends React.Component {
 
@@ -166,14 +170,27 @@ class ShowScreen extends React.Component {
     /**
      * Make Measure and store 
      */
-    storeMeasure = () =>{
-        let newMeasure= Math.random()*this.state.container.height;
-        this.props.measureService.store(this.state.container,newMeasure)
-             .then(res => {
-                 console.log(res);
+    storeMeasure = () => {
+        let newMeasure = Math.random() * this.state.container.height;
+        this.props.measureService.store(this.state.container, newMeasure)
+        .then(res => {
+            Alert.alert(
+                `Contenido Actual`,
+                `Tienes actualmente ${res.volume.toFixed(2)} litros en tu contenedor`,
+            );
+            let container = this.state.container;
+            if (container.measures.length === 60) {
+                container.measures.pop();
+            }
+            container.measures.unshift(res);
+            this.props.updateContainer(container);
+            this.setState({container: container});
         })
         .catch(err => {
-           console.log(err.errors);
+            Alert.alert(
+                `No se pudo realizar la medición`,
+                'Por favor intentalo de nuevo',
+            );
         });
     }
 
@@ -227,12 +244,6 @@ class ShowScreen extends React.Component {
                     icon="ios-create"
                     onPress={this.pushUpdateScreen}
                 />
-                <DefaultButton
-                    loading={false}
-                    title={"Configurar dispositivo"}
-                    icon="ios-cog"
-                    onPress={this.showConfigureDeviceModal}
-                />
             </DefaultScrollView>
         );
     }
@@ -262,5 +273,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ShowScreen;
+const mapDispatchToProps = dispatch => {
+    return {
+        updateContainer: (container) => dispatch(updateContainer(container))
+    };
+};
+export default connect(null, mapDispatchToProps)(ShowScreen);
 
